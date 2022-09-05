@@ -3,7 +3,9 @@ package com.shevy.gifapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.shevy.gifapp.data.GiphyDC
 import com.shevy.gifapp.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,23 +26,23 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         val rcView = binding.recyclerView
-        val recyclerAdapter = RecyclerViewAdapter(this)
-        rcView.layoutManager = LinearLayoutManager(this)
-        //rcView.adapter = recyclerAdapter
-        rcView.adapter = recyclerAdapter
+        //rcView.layoutManager = LinearLayoutManager(this)
+        rcView.layoutManager = GridLayoutManager(this, 2)
 
         val apiInterface = ApiInterface.create().getGifs()
 
-        apiInterface.enqueue(object : Callback<TestDC> {
+        apiInterface.enqueue(object : Callback<GiphyDC> {
+            override fun onResponse(call: Call<GiphyDC>, response: Response<GiphyDC>) {
 
-            override fun onResponse(call: Call<TestDC>, response: Response<TestDC>) {
+                val recyclerAdapter = response.body()?.let { RecyclerViewAdapter(it.data) }
+                rcView.adapter = recyclerAdapter
 
-                Log.d("TestLogs", "On Response Success ${response.body()?.data?.first_name}")
+                Log.d("TestLogs", "On Response Success ${response.body()?.data}")
                 /*if (response?.body() != null)
                     recyclerAdapter.setGifsListItems(response.body()!!)*/
             }
 
-            override fun onFailure(call: Call<TestDC>, t: Throwable) {
+            override fun onFailure(call: Call<GiphyDC>, t: Throwable) {
                 Log.d("TestLogs", "On Failure  ${t.message}")
             }
         })
