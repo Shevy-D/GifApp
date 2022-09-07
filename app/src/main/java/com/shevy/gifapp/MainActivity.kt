@@ -10,6 +10,7 @@ import com.shevy.gifapp.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Query
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -19,17 +20,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-/*        fun fillList(): List<Gifs> {
-            val data = mutableListOf<Gifs>()
-            (0..30).forEach { i -> data.add(Gifs("$i element from Gifs()", "hey")) }
-            return data
-        }*/
-
         val rcView = binding.recyclerView
         //rcView.layoutManager = LinearLayoutManager(this)
         rcView.layoutManager = GridLayoutManager(this, 2)
 
-        val apiInterface = ApiInterface.create().getGifs()
+        //val apiInterface = ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 25, "g")
+
+        val filter = HashMap<String, String>()
+        filter["api_key"] = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
+        filter["q"] = "taxi" //change it
+        filter["limit"] = "25"
+        filter["offset"] = "0"
+        filter["rating"] = "g"
+        filter["lang"] = "en"
+
+        val apiInterface = ApiInterface.create().getGifsHashMapSearch(filter)
 
         apiInterface.enqueue(object : Callback<GiphyDC> {
             override fun onResponse(call: Call<GiphyDC>, response: Response<GiphyDC>) {
