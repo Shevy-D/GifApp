@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.GiphyDC
 import com.shevy.gifapp.databinding.ActivityMainBinding
 import retrofit2.Call
@@ -20,7 +22,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //rcView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
+        //binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
+        binding.recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
 
         binding.searchButton.setOnClickListener {
 

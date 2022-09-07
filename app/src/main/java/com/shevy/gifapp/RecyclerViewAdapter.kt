@@ -15,7 +15,7 @@ class RecyclerViewAdapter(private val gifs: List<Data>) :
         private val binding = RecyclerviewItemBinding.bind(item)
 
         val imageView = binding.imageView
-        val textView = binding.textView
+        //val textView = binding.textView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifsViewHolder {
@@ -26,7 +26,7 @@ class RecyclerViewAdapter(private val gifs: List<Data>) :
 
     override fun onBindViewHolder(holder: GifsViewHolder, position: Int) {
         val itemsGifs = gifs[position]
-        holder.textView.text = itemsGifs.title
+        //holder.textView.text = itemsGifs.title
         Picasso.get().load(itemsGifs.images.original.url).into(holder.imageView)
     }
 
