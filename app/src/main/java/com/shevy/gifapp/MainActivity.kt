@@ -1,5 +1,6 @@
 package com.shevy.gifapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -92,6 +93,19 @@ class MainActivity : AppCompatActivity() {
 
                 val recyclerAdapter =
                     response.body()?.let { RecyclerViewAdapter(this@MainActivity, it.data) }
+
+                recyclerAdapter?.setOnItemClickListener(object :
+                    RecyclerViewAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        val intent = Intent(this@MainActivity, SecondActivity::class.java)
+                        //change it -> !!
+                        intent.putExtra("url", response.body()!!.data[position].images.original.url)
+                        startActivity(intent)
+
+                        //Log.d("TestSecond", "Put url ${response.body()!!.data[position].images.original.url}")
+                    }
+                })
+
                 binding.recyclerView.adapter = recyclerAdapter
 
                 Log.d("TestLog", "On Response Success ${response.body()?.data}")
