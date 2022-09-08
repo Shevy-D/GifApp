@@ -37,12 +37,12 @@ class MainActivity : AppCompatActivity() {
         Log.d("TestLogs", "Search text = ${searchEditText.isEmpty()}")
 
         apiInterface = if (searchEditText.isEmpty()) {
-            ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 25, "g")
+            ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 30, "g")
         } else {
             val filter = HashMap<String, String>()
             filter["api_key"] = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
             filter["q"] = searchEditText
-            filter["limit"] = "25"
+            filter["limit"] = "30"
             filter["offset"] = "0"
             filter["rating"] = "g"
             filter["lang"] = "en"
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             val filter = HashMap<String, String>()
             filter["api_key"] = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
             filter["q"] = binding.searchEditText.text?.trim().toString()
-            filter["limit"] = "25"
+            filter["limit"] = "30"
             filter["offset"] = "0"
             filter["rating"] = "g"
             filter["lang"] = "en"
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             searchEditText = binding.searchEditText.text?.trim().toString()
 
             apiInterface = if (searchEditText.isEmpty()) {
-                ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 25, "g")
+                ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 30, "g")
             } else {
                 ApiInterface.create().getGifsHashMapSearch(filter)
             }
@@ -90,7 +90,8 @@ class MainActivity : AppCompatActivity() {
         apiInterface.enqueue(object : Callback<GiphyDC> {
             override fun onResponse(call: Call<GiphyDC>, response: Response<GiphyDC>) {
 
-                val recyclerAdapter = response.body()?.let { RecyclerViewAdapter(it.data) }
+                val recyclerAdapter =
+                    response.body()?.let { RecyclerViewAdapter(this@MainActivity, it.data) }
                 binding.recyclerView.adapter = recyclerAdapter
 
                 Log.d("TestLog", "On Response Success ${response.body()?.data}")

@@ -1,14 +1,17 @@
 package com.shevy.gifapp
 
+import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.shevy.gifapp.data.Data
 import com.shevy.gifapp.databinding.RecyclerviewItemBinding
 import com.squareup.picasso.Picasso
 
-class RecyclerViewAdapter(private val gifs: List<Data>) :
+class RecyclerViewAdapter(private val context: Context, private val gifs: List<Data>) :
     RecyclerView.Adapter<RecyclerViewAdapter.GifsViewHolder>() {
 
     class GifsViewHolder(item: View) : RecyclerView.ViewHolder(item) {
@@ -27,7 +30,8 @@ class RecyclerViewAdapter(private val gifs: List<Data>) :
     override fun onBindViewHolder(holder: GifsViewHolder, position: Int) {
         val itemsGifs = gifs[position]
         //holder.textView.text = itemsGifs.title
-        Picasso.get().load(itemsGifs.images.original.url).into(holder.imageView)
+        //Picasso.get().load(itemsGifs.images.original.url).into(holder.imageView)
+        Glide.with(context).load(itemsGifs.images.original.url).into(holder.imageView)
     }
 
     override fun getItemCount(): Int = gifs.size
