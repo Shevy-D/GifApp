@@ -2,8 +2,8 @@ package com.shevy.gifapp
 
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.GiphyDC
@@ -15,6 +15,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var apiInterface: Call<GiphyDC>
+    lateinit var searchEditText: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,22 +27,63 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
 
-        binding.searchButton.setOnClickListener {
+        searchEditText = binding.searchEditText.text?.trim().toString()
 
+        if (savedInstanceState != null) {
+            searchEditText = savedInstanceState.getString("search").toString()
+            Log.d("TestLogs", "SearchEditText = $searchEditText")
+        }
+
+        Log.d("TestLogs", "Search text = ${searchEditText.isEmpty()}")
+
+        apiInterface = if (searchEditText.isEmpty()) {
+            ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 25, "g")
+        } else {
             val filter = HashMap<String, String>()
             filter["api_key"] = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
-            filter["q"] = binding.searchEditText.text.toString()
+            filter["q"] = searchEditText
             filter["limit"] = "25"
             filter["offset"] = "0"
             filter["rating"] = "g"
             filter["lang"] = "en"
 
-            apiInterface = ApiInterface.create().getGifsHashMapSearch(filter)
+            ApiInterface.create().getGifsHashMapSearch(filter)
+        }
+
+        binding.searchButton.setOnClickListener {
+            val filter = HashMap<String, String>()
+            filter["api_key"] = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
+            filter["q"] = binding.searchEditText.text?.trim().toString()
+            filter["limit"] = "25"
+            filter["offset"] = "0"
+            filter["rating"] = "g"
+            filter["lang"] = "en"
+
+            searchEditText = binding.searchEditText.text?.trim().toString()
+
+            apiInterface = if (searchEditText.isEmpty()) {
+                ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 25, "g")
+            } else {
+                ApiInterface.create().getGifsHashMapSearch(filter)
+            }
+
+            val imm: InputMethodManager =
+                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+
+            Log.d("TestLogs", "ApiInterface SetOnClick $apiInterface}")
             apiEnqueue(apiInterface)
         }
 
-        apiInterface = ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 25, "g")
+        Log.d("TestLogs", "ApiInterface $apiInterface}")
+
         apiEnqueue(apiInterface)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("search", binding.searchEditText.text.toString())
+        //Log.d("TestLogs", "onSaveInstanceState = $outState")
     }
 
     private fun apiEnqueue(apiInterface: Call<GiphyDC>) {
@@ -51,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 val recyclerAdapter = response.body()?.let { RecyclerViewAdapter(it.data) }
                 binding.recyclerView.adapter = recyclerAdapter
 
-                Log.d("TestLogs", "On Response Success ${response.body()?.data}")
+                Log.d("TestLog", "On Response Success ${response.body()?.data}")
                 /*if (response?.body() != null)
                     recyclerAdapter.setGifsListItems(response.body()!!)*/
             }
