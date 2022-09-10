@@ -102,7 +102,6 @@ class MainActivity : AppCompatActivity() {
                     response.body()?.let {
                         RecyclerViewAdapter(this@MainActivity, it.data, listener)
                     }
-
                 binding.recyclerView.adapter = recyclerAdapter
 
                 Log.d("TestLog", "On Response Success ${response.body()?.data}")
