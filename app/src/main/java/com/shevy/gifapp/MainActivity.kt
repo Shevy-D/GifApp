@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.GiphyDC
 import com.shevy.gifapp.databinding.ActivityMainBinding
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,34 +38,19 @@ class MainActivity : AppCompatActivity() {
         Log.d("TestLogs", "Search text = ${searchEditText.isEmpty()}")
 
         apiInterface = if (searchEditText.isEmpty()) {
-            ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 30, "g")
+            ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 20, "g")
         } else {
-            val filter = HashMap<String, String>()
-            filter["api_key"] = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
-            filter["q"] = searchEditText
-            filter["limit"] = "30"
-            filter["offset"] = "0"
-            filter["rating"] = "g"
-            filter["lang"] = "en"
-
-            ApiInterface.create().getGifsHashMapSearch(filter)
+            ApiInterface.create().getGifsHashMapSearch(createFilter(searchEditText))
         }
 
         binding.searchButton.setOnClickListener {
-            val filter = HashMap<String, String>()
-            filter["api_key"] = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
-            filter["q"] = binding.searchEditText.text?.trim().toString()
-            filter["limit"] = "30"
-            filter["offset"] = "0"
-            filter["rating"] = "g"
-            filter["lang"] = "en"
-
             searchEditText = binding.searchEditText.text?.trim().toString()
+            //searchEditText = searchText
 
             apiInterface = if (searchEditText.isEmpty()) {
-                ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 30, "g")
+                ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 20, "g")
             } else {
-                ApiInterface.create().getGifsHashMapSearch(filter)
+                ApiInterface.create().getGifsHashMapSearch(createFilter(searchEditText))
             }
 
             val imm: InputMethodManager =
@@ -77,6 +64,18 @@ class MainActivity : AppCompatActivity() {
         Log.d("TestLogs", "ApiInterface $apiInterface}")
 
         apiEnqueue(apiInterface)
+    }
+
+    private fun createFilter(searchText: String): HashMap<String, String> {
+        val filter = HashMap<String, String>()
+        filter["api_key"] = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
+        filter["q"] = searchText
+        filter["limit"] = "20"
+        filter["offset"] = "0"
+        filter["rating"] = "g"
+        filter["lang"] = "en"
+
+        return filter
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

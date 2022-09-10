@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.shevy.gifapp.databinding.ActivitySecondBinding
+import kotlinx.coroutines.NonCancellable.start
 import java.io.File
 
 class SecondActivity : AppCompatActivity() {
@@ -31,12 +32,13 @@ class SecondActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val detailImageView = binding.detailImageView
+        val downloadButton = binding.downloadButton
 
         url = intent.getStringExtra("url").toString()
         Log.d("TestSecond", "Get url $url")
         Glide.with(this).load(url).into(detailImageView)
 
-        detailImageView.setOnClickListener {
+        downloadButton.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 askPermissions()
             } else {
@@ -52,16 +54,11 @@ class SecondActivity : AppCompatActivity() {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Permission is not granted
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
             ) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
                 AlertDialog.Builder(this)
                     .setTitle("Permission required")
                     .setMessage("Permission required to save photos from the Web.")
@@ -76,19 +73,13 @@ class SecondActivity : AppCompatActivity() {
                     .setNegativeButton("Deny") { dialog, id -> dialog.cancel() }
                     .show()
             } else {
-                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
                 )
-                // MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-
             }
         } else {
-            // Permission has already been granted
             downloadImage(url)
         }
     }
@@ -101,22 +92,12 @@ class SecondActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE -> {
-                // If request is cancelled, the result arrays are empty.
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    // permission was granted, yay!
-                    // Download the Image
                     downloadImage(url)
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-
                 }
                 return
             }
-            // Add other 'when' lines to check for other
-            // permissions this app might request.
             else -> {
-                // Ignore all other requests.
             }
         }
     }
@@ -133,7 +114,6 @@ class SecondActivity : AppCompatActivity() {
         }
 
         val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-
         val downloadUri = Uri.parse(url)
 
         val request = DownloadManager.Request(downloadUri).apply {
@@ -149,7 +129,7 @@ class SecondActivity : AppCompatActivity() {
 
         val downloadId = downloadManager.enqueue(request)
         val query = DownloadManager.Query().setFilterById(downloadId)
-        Thread(Runnable {
+        Thread {
             var downloading = true
             while (downloading) {
                 val cursor: Cursor = downloadManager.query(query)
@@ -167,7 +147,7 @@ class SecondActivity : AppCompatActivity() {
                 }
                 cursor.close()
             }
-        }).start()
+        }.start()
     }
 
     private fun statusMessage(url: String, directory: File, status: Int): String? {

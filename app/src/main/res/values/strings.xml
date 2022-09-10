@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GifApp</string>
     <string name="search_text">Search</string>
+    <string name="download_text">Download</string>
 </resources>

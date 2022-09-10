@@ -22,10 +22,8 @@ class RecyclerViewAdapter(
 
     inner class GifsViewHolder(item: View) :
         RecyclerView.ViewHolder(item) {
-
         private val binding = RecyclerviewItemBinding.bind(item)
         val imageView = binding.imageView
-
         init {
             item.setOnClickListener {
                 listener.onItemClick(adapterPosition)
