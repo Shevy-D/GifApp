@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.searchButton.setOnClickListener {
             searchEditText = binding.searchEditText.text?.trim().toString()
-            //searchEditText = searchText
 
             apiInterface = if (searchEditText.isEmpty()) {
                 ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 20, "g")
@@ -60,9 +59,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("TestLogs", "ApiInterface SetOnClick $apiInterface}")
             apiEnqueue(apiInterface)
         }
-
         Log.d("TestLogs", "ApiInterface $apiInterface}")
-
         apiEnqueue(apiInterface)
     }
 
