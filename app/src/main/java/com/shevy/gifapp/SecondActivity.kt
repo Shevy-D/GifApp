@@ -17,9 +17,7 @@ class SecondActivity : AppCompatActivity() {
         val detailImageView = binding.detailImageView
 
         val url = intent.getStringExtra("url")
-
         Log.d("TestSecond", "Get url $url")
-
         Glide.with(this).load(url).into(detailImageView)
     }
 }

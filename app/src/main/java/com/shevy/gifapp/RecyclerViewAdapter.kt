@@ -9,21 +9,18 @@ import com.bumptech.glide.Glide
 import com.shevy.gifapp.data.Data
 import com.shevy.gifapp.databinding.RecyclerviewItemBinding
 
-class RecyclerViewAdapter(private val context: Context, private val gifs: List<Data>) :
+class RecyclerViewAdapter(
+    private val context: Context,
+    private val gifs: List<Data>,
+    private val listener: OnItemClickListener
+) :
     RecyclerView.Adapter<RecyclerViewAdapter.GifsViewHolder>() {
-
-    lateinit var mListener: OnItemClickListener
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        mListener = listener
-    }
-
-
-    class GifsViewHolder(item: View, listener: OnItemClickListener) :
+    inner class GifsViewHolder(item: View) :
         RecyclerView.ViewHolder(item) {
 
         private val binding = RecyclerviewItemBinding.bind(item)
@@ -39,13 +36,11 @@ class RecyclerViewAdapter(private val context: Context, private val gifs: List<D
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifsViewHolder {
         return GifsViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_item, parent, false),
-            mListener
         )
     }
 
     override fun onBindViewHolder(holder: GifsViewHolder, position: Int) {
         val itemsGifs = gifs[position]
-        //Picasso.get().load(itemsGifs.images.original.url).into(holder.imageView)
         Glide.with(context).load(itemsGifs.images.original.url).into(holder.imageView)
     }
 

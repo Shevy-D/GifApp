@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //rcView.layoutManager = LinearLayoutManager(this)
-        //binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
         binding.recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
 
@@ -84,33 +82,30 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("search", binding.searchEditText.text.toString())
-        //Log.d("TestLogs", "onSaveInstanceState = $outState")
     }
 
     private fun apiEnqueue(apiInterface: Call<GiphyDC>) {
         apiInterface.enqueue(object : Callback<GiphyDC> {
             override fun onResponse(call: Call<GiphyDC>, response: Response<GiphyDC>) {
 
-                val recyclerAdapter =
-                    response.body()?.let { RecyclerViewAdapter(this@MainActivity, it.data) }
-
-                recyclerAdapter?.setOnItemClickListener(object :
-                    RecyclerViewAdapter.OnItemClickListener {
+                val listener = object : RecyclerViewAdapter.OnItemClickListener {
                     override fun onItemClick(position: Int) {
                         val intent = Intent(this@MainActivity, SecondActivity::class.java)
-                        //change it -> !!
-                        intent.putExtra("url", response.body()!!.data[position].images.original.url)
+                        intent.putExtra(
+                            "url",
+                            response.body()!!.data[position].images.original.url
+                        )
                         startActivity(intent)
-
-                        //Log.d("TestSecond", "Put url ${response.body()!!.data[position].images.original.url}")
                     }
-                })
+                }
+                val recyclerAdapter =
+                    response.body()?.let {
+                        RecyclerViewAdapter(this@MainActivity, it.data, listener)
+                    }
 
                 binding.recyclerView.adapter = recyclerAdapter
 
                 Log.d("TestLog", "On Response Success ${response.body()?.data}")
-                /*if (response?.body() != null)
-                    recyclerAdapter.setGifsListItems(response.body()!!)*/
             }
 
             override fun onFailure(call: Call<GiphyDC>, t: Throwable) {
