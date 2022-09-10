@@ -19,7 +19,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.shevy.gifapp.databinding.ActivitySecondBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.NonCancellable.start
+import kotlinx.coroutines.launch
 import java.io.File
 
 class SecondActivity : AppCompatActivity() {
@@ -129,7 +133,26 @@ class SecondActivity : AppCompatActivity() {
 
         val downloadId = downloadManager.enqueue(request)
         val query = DownloadManager.Query().setFilterById(downloadId)
-        Thread {
+
+/*        CoroutineScope(Dispatchers.IO).launch {
+            var downloading = true
+            while (downloading) {
+                val cursor: Cursor = downloadManager.query(query)
+                cursor.moveToFirst()
+                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                    downloading = false
+                }
+                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                msg = statusMessage(url, directory, status)
+                if (msg != lastMsg) {
+                    Toast.makeText(this@SecondActivity, msg, Toast.LENGTH_SHORT).show()
+                    lastMsg = msg ?: ""
+                }
+                cursor.close()
+            }
+        }*/
+
+            Thread {
             var downloading = true
             while (downloading) {
                 val cursor: Cursor = downloadManager.query(query)
@@ -141,7 +164,7 @@ class SecondActivity : AppCompatActivity() {
                 msg = statusMessage(url, directory, status)
                 if (msg != lastMsg) {
                     this.runOnUiThread {
-                        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
                     }
                     lastMsg = msg ?: ""
                 }

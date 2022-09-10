@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.GiphyDC
 import com.shevy.gifapp.databinding.ActivityMainBinding
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.DelicateCoroutinesApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var apiInterface: Call<GiphyDC>
     lateinit var searchEditText: String
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-
         searchEditText = binding.searchEditText.text?.trim().toString()
 
         if (savedInstanceState != null) {
@@ -56,11 +55,15 @@ class MainActivity : AppCompatActivity() {
                 getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
 
-            Log.d("TestLogs", "ApiInterface SetOnClick $apiInterface}")
             apiEnqueue(apiInterface)
         }
-        Log.d("TestLogs", "ApiInterface $apiInterface}")
+
         apiEnqueue(apiInterface)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("search", binding.searchEditText.text.toString())
     }
 
     private fun createFilter(searchText: String): HashMap<String, String> {
@@ -73,11 +76,6 @@ class MainActivity : AppCompatActivity() {
         filter["lang"] = "en"
 
         return filter
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("search", binding.searchEditText.text.toString())
     }
 
     private fun apiEnqueue(apiInterface: Call<GiphyDC>) {
