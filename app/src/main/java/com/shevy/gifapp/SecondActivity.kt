@@ -9,21 +9,16 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.shevy.gifapp.databinding.ActivitySecondBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.NonCancellable.start
-import kotlinx.coroutines.launch
 import java.io.File
 
 class SecondActivity : AppCompatActivity() {
@@ -134,25 +129,7 @@ class SecondActivity : AppCompatActivity() {
         val downloadId = downloadManager.enqueue(request)
         val query = DownloadManager.Query().setFilterById(downloadId)
 
-/*        CoroutineScope(Dispatchers.IO).launch {
-            var downloading = true
-            while (downloading) {
-                val cursor: Cursor = downloadManager.query(query)
-                cursor.moveToFirst()
-                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
-                    downloading = false
-                }
-                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                msg = statusMessage(url, directory, status)
-                if (msg != lastMsg) {
-                    Toast.makeText(this@SecondActivity, msg, Toast.LENGTH_SHORT).show()
-                    lastMsg = msg ?: ""
-                }
-                cursor.close()
-            }
-        }*/
-
-            Thread {
+        Thread {
             var downloading = true
             while (downloading) {
                 val cursor: Cursor = downloadManager.query(query)

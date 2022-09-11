@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.GiphyDC
 import com.shevy.gifapp.databinding.ActivityMainBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var apiInterface: Call<GiphyDC>
     lateinit var searchEditText: String
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+
         searchEditText = binding.searchEditText.text?.trim().toString()
 
         if (savedInstanceState != null) {
@@ -58,7 +60,9 @@ class MainActivity : AppCompatActivity() {
             apiEnqueue(apiInterface)
         }
 
-        apiEnqueue(apiInterface)
+        MainScope().launch {
+            apiEnqueue(apiInterface)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
