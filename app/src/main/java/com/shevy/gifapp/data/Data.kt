@@ -1,5 +1,7 @@
 package com.shevy.gifapp.data
 
+//TODO почистить от неисопльзуемых полей
+//TODO переименовать
 data class Data(
     val analytics: Analytics,
     val analytics_response_payload: String,

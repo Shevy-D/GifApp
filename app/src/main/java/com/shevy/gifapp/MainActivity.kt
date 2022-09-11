@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.GiphyDC
 import com.shevy.gifapp.databinding.ActivityMainBinding
-import kotlinx.coroutines.DelicateCoroutinesApi
+import com.shevy.gifapp.domain.Gif
+import com.shevy.gifapp.domain.GifsInteractor
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -20,6 +22,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var apiInterface: Call<GiphyDC>
     lateinit var searchEditText: String
+    private val interactor = GifsInteractor.create()
+
+    // TODO инициировать адаптер сразу здесть
+    private val adapter = ListenerSample(::onClick)
+    //adapter.addGifs(gifs)
+
+    private fun onClick(gif: Gif){
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +69,11 @@ class MainActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
 
             apiEnqueue(apiInterface)
+        }
+
+        lifecycleScope.launch {
+            val gifs = interactor.getTrendingGifs().await()
+            // TODO положить гифки в адаптер
         }
 
         MainScope().launch {

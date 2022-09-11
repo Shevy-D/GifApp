@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.shevy.gifapp.data.Data
 import com.shevy.gifapp.databinding.RecyclerviewItemBinding
 
+//TODO GifsAdapter
 class RecyclerViewAdapter(
     private val context: Context,
     private val gifs: List<Data>,

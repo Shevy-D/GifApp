@@ -2,7 +2,7 @@ package com.shevy.gifapp.data
 
 data class Images(
     val `480w_still`: WStill,
-    val downsized: Downsized,
+    val downsized: Downsized,//TODO можно использовать в качестве превьюшки в списке
     val downsized_large: DownsizedLarge,
     val downsized_medium: DownsizedMedium,
     val downsized_small: DownsizedSmall,
