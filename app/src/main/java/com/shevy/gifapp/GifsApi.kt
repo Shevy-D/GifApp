@@ -6,42 +6,56 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
-import retrofit2.http.QueryMap
 
-//TODO rename GifsApi
-interface ApiInterface {
+interface GifsApi {
 
-    //TODO rename getTrendingGifs
+    // delete it
     @GET("v1/gifs/trending")
-    fun getGifs(
+    fun trendingGifs(
         @Query("api_key") apiKey: String,
         @Query("limit") limit: Int,
         @Query("rating") rating: String,
     ): Call<GiphyDC>
 
     @GET("v1/gifs/trending")
-    suspend fun getGifsSuspend(
+    suspend fun getTrendingGifs(
         @Query("api_key") apiKey: String,
         @Query("limit") limit: Int,
         @Query("rating") rating: String,
     ): GiphyDC
 
-    // TODO явно перечислить все параметры запроса как в getGifs
-    // rename searchGifs
     @GET("v1/gifs/search")
-    fun getGifsHashMapSearch(@QueryMap filter: HashMap<String, String>): Call<GiphyDC>
+    fun getSearchingGifs(
+        @Query("api_key") apiKey: String,
+        @Query("q") q: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: String,
+        @Query("rating") rating: String,
+        @Query("lang") lang: String
+    ): GiphyDC
+
+    // delete it
+    @GET("v1/gifs/search")
+    fun searchingGifs(
+        @Query("api_key") apiKey: String,
+        @Query("q") q: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: String,
+        @Query("rating") rating: String,
+        @Query("lang") lang: String
+    ): Call<GiphyDC>
 
     companion object {
         var BASE_URL = "https://api.giphy.com/"
 
-        fun create(): ApiInterface {
+        fun create(): GifsApi {
             val retrofit = Retrofit.Builder()
                 // TODO gson->moshi
                 // TODO GsonConverterFactory -> MoshiConverterFactory
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(BASE_URL)
                 .build()
-            return retrofit.create(ApiInterface::class.java)
+            return retrofit.create(GifsApi::class.java)
         }
     }
 }

@@ -6,16 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.shevy.gifapp.data.Data
+import com.shevy.gifapp.data.Gifs
 import com.shevy.gifapp.databinding.RecyclerviewItemBinding
 
-//TODO GifsAdapter
-class RecyclerViewAdapter(
+class GifsAdapter(
     private val context: Context,
-    private val gifs: List<Data>,
+    private val gifs: List<Gifs>,
     private val listener: OnItemClickListener
 ) :
-    RecyclerView.Adapter<RecyclerViewAdapter.GifsViewHolder>() {
+    RecyclerView.Adapter<GifsAdapter.GifsViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
@@ -40,7 +39,7 @@ class RecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: GifsViewHolder, position: Int) {
         val itemsGifs = gifs[position]
-        Glide.with(context).load(itemsGifs.images.original.url).into(holder.imageView)
+        Glide.with(context).load(itemsGifs.images.downsized.url).into(holder.imageView)
     }
 
     override fun getItemCount(): Int = gifs.size

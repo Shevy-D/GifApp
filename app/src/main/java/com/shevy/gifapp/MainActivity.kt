@@ -5,15 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.GiphyDC
 import com.shevy.gifapp.databinding.ActivityMainBinding
 import com.shevy.gifapp.domain.Gif
 import com.shevy.gifapp.domain.GifsInteractor
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val adapter = ListenerSample(::onClick)
     //adapter.addGifs(gifs)
 
-    private fun onClick(gif: Gif){
+    private fun onClick(gif: Gif) {
 
     }
 
@@ -50,18 +47,18 @@ class MainActivity : AppCompatActivity() {
         Log.d("TestLogs", "Search text = ${searchEditText.isEmpty()}")
 
         apiInterface = if (searchEditText.isEmpty()) {
-            ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 20, "g")
+            GifsApi.create().trendingGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 20, "g")
         } else {
-            ApiInterface.create().getGifsHashMapSearch(createFilter(searchEditText))
+            GifsApi.create().searchingGifs(apiKey, searchEditText, limit, offset, rating, lang)
         }
 
         binding.searchButton.setOnClickListener {
             searchEditText = binding.searchEditText.text?.trim().toString()
 
             apiInterface = if (searchEditText.isEmpty()) {
-                ApiInterface.create().getGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 20, "g")
+                GifsApi.create().trendingGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 20, "g")
             } else {
-                ApiInterface.create().getGifsHashMapSearch(createFilter(searchEditText))
+                GifsApi.create().searchingGifs(apiKey, searchEditText, limit, offset, rating, lang)
             }
 
             val imm: InputMethodManager =
@@ -71,14 +68,12 @@ class MainActivity : AppCompatActivity() {
             apiEnqueue(apiInterface)
         }
 
-        lifecycleScope.launch {
+/*        lifecycleScope.launch {
             val gifs = interactor.getTrendingGifs().await()
             // TODO положить гифки в адаптер
-        }
+        }*/
 
-        MainScope().launch {
-            apiEnqueue(apiInterface)
-        }
+        apiEnqueue(apiInterface)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -102,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         apiInterface.enqueue(object : Callback<GiphyDC> {
             override fun onResponse(call: Call<GiphyDC>, response: Response<GiphyDC>) {
 
-                val listener = object : RecyclerViewAdapter.OnItemClickListener {
+                val listener = object : GifsAdapter.OnItemClickListener {
                     override fun onItemClick(position: Int) {
                         val intent = Intent(this@MainActivity, SecondActivity::class.java)
                         intent.putExtra(
@@ -114,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 val recyclerAdapter =
                     response.body()?.let {
-                        RecyclerViewAdapter(this@MainActivity, it.data, listener)
+                        GifsAdapter(this@MainActivity, it.data, listener)
                     }
                 binding.recyclerView.adapter = recyclerAdapter
 
@@ -125,5 +120,14 @@ class MainActivity : AppCompatActivity() {
                 Log.d("TestLogs", "On Failure  ${t.message}")
             }
         })
+    }
+
+    //delete it
+    companion object {
+        private const val apiKey = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
+        private const val limit = 20
+        private const val offset = "0"
+        private const val rating = "g"
+        private const val lang = "en"
     }
 }
