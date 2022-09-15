@@ -1,10 +1,11 @@
-package com.shevy.gifapp.presentation.ui.activities
+package com.shevy.gifapp.presentation.view
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.ListenerSample
@@ -14,6 +15,7 @@ import com.shevy.gifapp.domain.interactors.Gif
 import com.shevy.gifapp.presentation.GifsAdapter
 import com.shevy.gifapp.domain.GifsApi
 import com.shevy.gifapp.domain.interactors.GifsInteractor
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -72,15 +74,15 @@ class MainActivity : AppCompatActivity() {
             apiEnqueue(apiInterface)
         }
 
-/*        lifecycleScope.launch {
+        lifecycleScope.launch {
             val gifs = interactor.getTrendingGifs().await()
             // TODO положить гифки в адаптер
-        }*/
+        }
 
 /*        MainScope().launch {
             GifsInteractor.create().getTrendingGifs().await()
         }*/
-        apiEnqueue(apiInterface)
+        //apiEnqueue(apiInterface)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
