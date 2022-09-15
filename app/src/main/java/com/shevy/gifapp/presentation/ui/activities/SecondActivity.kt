@@ -1,4 +1,4 @@
-package com.shevy.gifapp
+package com.shevy.gifapp.presentation.ui.activities
 
 import android.Manifest
 import android.annotation.SuppressLint

@@ -1,4 +1,4 @@
-package com.shevy.gifapp
+package com.shevy.gifapp.presentation.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +7,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.shevy.gifapp.ListenerSample
 import com.shevy.gifapp.data.GiphyDC
 import com.shevy.gifapp.databinding.ActivityMainBinding
-import com.shevy.gifapp.domain.Gif
-import com.shevy.gifapp.domain.GifsInteractor
+import com.shevy.gifapp.domain.interactors.Gif
+import com.shevy.gifapp.presentation.GifsAdapter
+import com.shevy.gifapp.domain.GifsApi
+import com.shevy.gifapp.domain.interactors.GifsInteractor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,6 +59,7 @@ class MainActivity : AppCompatActivity() {
             searchEditText = binding.searchEditText.text?.trim().toString()
 
             apiInterface = if (searchEditText.isEmpty()) {
+
                 GifsApi.create().trendingGifs("Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx", 20, "g")
             } else {
                 GifsApi.create().searchingGifs(apiKey, searchEditText, limit, offset, rating, lang)
@@ -73,6 +77,9 @@ class MainActivity : AppCompatActivity() {
             // TODO положить гифки в адаптер
         }*/
 
+/*        MainScope().launch {
+            GifsInteractor.create().getTrendingGifs().await()
+        }*/
         apiEnqueue(apiInterface)
     }
 

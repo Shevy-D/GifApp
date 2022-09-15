@@ -1,23 +1,12 @@
-package com.shevy.gifapp.domain
+package com.shevy.gifapp.domain.interactors
 
-import com.shevy.gifapp.GifsApi
+import com.shevy.gifapp.domain.GifsApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 
-class GifsInteractor(
-    private val api: GifsApi
-) {
-    /*
-    filter["api_key"] = "Wh80AKplXriFbdAoHIjQa6pQgEWuVwLx"
-        filter["q"] = searchText
-        filter["limit"] = "20"
-        filter["offset"] = "0"
-        filter["rating"] = "g"
-        filter["lang"] = "en"
-
-     */
+class GifsInteractor(private val api: GifsApi) {
 
     private val scope = CoroutineScope(Dispatchers.IO)
 

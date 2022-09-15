@@ -1,9 +1,9 @@
-package com.shevy.gifapp
+package com.shevy.gifapp.domain
 
 import com.shevy.gifapp.data.GiphyDC
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -25,7 +25,7 @@ interface GifsApi {
     ): GiphyDC
 
     @GET("v1/gifs/search")
-    fun getSearchingGifs(
+    suspend fun getSearchingGifs(
         @Query("api_key") apiKey: String,
         @Query("q") q: String,
         @Query("limit") limit: Int,
@@ -52,7 +52,7 @@ interface GifsApi {
             val retrofit = Retrofit.Builder()
                 // TODO gson->moshi
                 // TODO GsonConverterFactory -> MoshiConverterFactory
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(MoshiConverterFactory.create())
                 .baseUrl(BASE_URL)
                 .build()
             return retrofit.create(GifsApi::class.java)
