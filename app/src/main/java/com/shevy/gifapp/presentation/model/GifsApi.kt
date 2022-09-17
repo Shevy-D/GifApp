@@ -1,4 +1,4 @@
-package com.shevy.gifapp.domain
+package com.shevy.gifapp.presentation.model
 
 import com.shevy.gifapp.data.GiphyDC
 import retrofit2.Call
@@ -50,8 +50,6 @@ interface GifsApi {
 
         fun create(): GifsApi {
             val retrofit = Retrofit.Builder()
-                // TODO gson->moshi
-                // TODO GsonConverterFactory -> MoshiConverterFactory
                 .addConverterFactory(MoshiConverterFactory.create())
                 .baseUrl(BASE_URL)
                 .build()
