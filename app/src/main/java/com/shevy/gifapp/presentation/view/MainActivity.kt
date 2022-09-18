@@ -33,13 +33,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.recyclerView.layoutManager =
+        val searchButton = binding.searchButton
+        val recyclerView = binding.recyclerView
+
+        recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        binding.recyclerView.adapter = adapter
+        recyclerView.adapter = adapter
 
         checkSearchEditText(savedInstanceState)
 
-        binding.searchButton.setOnClickListener {
+        searchButton.setOnClickListener {
             searchEditText = binding.searchEditText.text?.trim().toString()
 
             lifecycleScope.launch {
@@ -50,7 +53,6 @@ class MainActivity : AppCompatActivity() {
             val imm: InputMethodManager =
                 getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-
         }
 
         lifecycleScope.launch {
