@@ -1,4 +1,4 @@
-package com.shevy.gifapp.data
+package com.shevy.gifapp.data.models
 
 data class Downsized(
     val height: String,

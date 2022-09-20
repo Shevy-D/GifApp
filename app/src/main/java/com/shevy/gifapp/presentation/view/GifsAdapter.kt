@@ -18,12 +18,13 @@ class GifsAdapter(
     private val gif = mutableListOf<Gif>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setGifs(gif: List<Gif>) {
+    fun setGifs(gifs: List<Gif>) {
         this.gif.apply {
             clear()
-            addAll(gif)
+            addAll(gifs)
         }
         notifyDataSetChanged()
+        //notifyItemChanged()
     }
 
     inner class GifsViewHolder(item: View, private val onGifSelected: (gif: Gif) -> Unit) :

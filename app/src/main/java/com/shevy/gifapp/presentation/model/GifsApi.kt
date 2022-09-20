@@ -1,21 +1,12 @@
 package com.shevy.gifapp.presentation.model
 
-import com.shevy.gifapp.data.GiphyDC
-import retrofit2.Call
+import com.shevy.gifapp.data.models.GiphyDC
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface GifsApi {
-
-    // delete it
-    @GET("v1/gifs/trending")
-    fun trendingGifs(
-        @Query("api_key") apiKey: String,
-        @Query("limit") limit: Int,
-        @Query("rating") rating: String,
-    ): Call<GiphyDC>
 
     @GET("v1/gifs/trending")
     suspend fun getTrendingGifs(
@@ -33,17 +24,6 @@ interface GifsApi {
         @Query("rating") rating: String,
         @Query("lang") lang: String
     ): GiphyDC
-
-    // delete it
-    @GET("v1/gifs/search")
-    fun searchingGifs(
-        @Query("api_key") apiKey: String,
-        @Query("q") q: String,
-        @Query("limit") limit: Int,
-        @Query("offset") offset: String,
-        @Query("rating") rating: String,
-        @Query("lang") lang: String
-    ): Call<GiphyDC>
 
     companion object {
         var BASE_URL = "https://api.giphy.com/"
