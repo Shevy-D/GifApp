@@ -1,4 +1,4 @@
-package com.shevy.gifapp.presentation.model
+package com.shevy.gifapp.domain
 
 import com.shevy.gifapp.data.models.GiphyDC
 import retrofit2.Retrofit

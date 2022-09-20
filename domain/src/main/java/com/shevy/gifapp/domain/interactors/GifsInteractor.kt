@@ -1,6 +1,7 @@
 package com.shevy.gifapp.domain.interactors
 
-import com.shevy.gifapp.presentation.model.GifsApi
+//import com.shevy.gifapp.data.GifsApi
+import com.shevy.gifapp.domain.GifsApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
