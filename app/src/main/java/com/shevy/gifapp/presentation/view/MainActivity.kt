@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     private val adapter = GifsAdapter(::onClick)
     //adapter.addGifs(gifs)
 
-
     private fun onClick(gif: Gif) {
         val intent = Intent(this@MainActivity, SecondActivity::class.java)
         intent.putExtra("url", gif.url)
