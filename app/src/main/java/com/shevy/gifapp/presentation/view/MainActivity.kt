@@ -7,20 +7,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.shevy.gifapp.data.Gif
+import com.shevy.gifapp.data.GifsInteractorImpl
 import com.shevy.gifapp.databinding.ActivityMainBinding
-import com.shevy.gifapp.domain.interactors.Gif
-import com.shevy.gifapp.domain.interactors.GifsInteractor
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var searchEditText: String
-    private val interactor = GifsInteractor.create()
+    private val interactor = GifsInteractorImpl.create()
 
     // TODO инициировать адаптер сразу здесть
     //private val adapter = ListenerSample(::onClick)
     private val adapter = GifsAdapter(::onClick)
     //adapter.addGifs(gifs)
+
 
     private fun onClick(gif: Gif) {
         val intent = Intent(this@MainActivity, SecondActivity::class.java)
