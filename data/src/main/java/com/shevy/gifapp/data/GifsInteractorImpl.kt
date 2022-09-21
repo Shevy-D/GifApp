@@ -1,6 +1,10 @@
 package com.shevy.gifapp.data
 
+<<<<<<< HEAD:data/src/main/java/com/shevy/gifapp/data/GifsInteractorImpl.kt
 import com.shevy.gifapp.domain.interactors.GifInteractor
+=======
+import com.shevy.gifapp.data.GifsApi
+>>>>>>> 5ca7875d96905dd990e39c593f1b8346b5f39186:app/src/main/java/com/shevy/gifapp/domain/interactors/GifsInteractor.kt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
