@@ -4,18 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.Gif
 import com.shevy.gifapp.data.GifsInteractorImpl
 import com.shevy.gifapp.databinding.ActivityMainBinding
+import com.shevy.gifapp.presentation.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var searchEditText: String
     private val interactor = GifsInteractorImpl.create()
+
+    private lateinit var vm: MainViewModel
 
     // TODO инициировать адаптер сразу здесть
     //private val adapter = ListenerSample(::onClick)
@@ -33,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        vm = ViewModelProvider(this)[MainViewModel::class.java]
+
         val searchButton = binding.searchButton
         val recyclerView = binding.recyclerView
 
@@ -40,7 +46,12 @@ class MainActivity : AppCompatActivity() {
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
 
+        //binding.searchEditText.text = vm.resultLiveMutable.value
         checkSearchEditText(savedInstanceState)
+
+/*        vm.resultLive.observe(this) { text ->
+            binding.searchEditText.text = text
+        }*/
 
         searchButton.setOnClickListener {
             searchEditText = binding.searchEditText.text?.trim().toString()
