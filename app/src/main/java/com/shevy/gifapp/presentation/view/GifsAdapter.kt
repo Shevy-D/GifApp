@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.shevy.gifapp.R
+import com.shevy.gifapp.data.Gif
 import com.shevy.gifapp.databinding.RecyclerviewItemBinding
-import com.shevy.gifapp.domain.interactors.Gif
 
 class GifsAdapter(
     private val onGifSelected: ((gif: Gif) -> Unit)

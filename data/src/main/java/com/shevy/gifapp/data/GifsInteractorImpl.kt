@@ -1,17 +1,16 @@
-package com.shevy.gifapp.domain.interactors
+package com.shevy.gifapp.data
 
-//import com.shevy.gifapp.data.GifsApi
-import com.shevy.gifapp.domain.GifsApi
+import com.shevy.gifapp.domain.interactors.GifInteractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 
-class GifsInteractor(private val api: GifsApi) {
+class GifsInteractorImpl(private val api: GifsApi): GifInteractor {
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    fun getTrendingGifs(): Deferred<List<Gif>> = scope.async {
+    override fun getTrendingGifs(): Deferred<List<Gif>> = scope.async {
         val response = api.getTrendingGifs(apiKey, limit, rating)
         val gifs = response.data.map {
             Gif(it.images.downsized.url, it.images.original.url)
@@ -19,7 +18,7 @@ class GifsInteractor(private val api: GifsApi) {
         return@async gifs
     }
 
-    fun getSearchingGifs(q: String): Deferred<List<Gif>> = scope.async {
+    override fun getSearchingGifs(q: String): Deferred<List<Gif>> = scope.async {
         val response = api.getSearchingGifs(apiKey, q, limit, offset, rating, lang)
         val gifs = response.data.map {
             Gif(it.images.downsized.url, it.images.original.url)
@@ -35,8 +34,8 @@ class GifsInteractor(private val api: GifsApi) {
         private const val lang = "en"
 
 
-        fun create(): GifsInteractor {
-            return GifsInteractor(GifsApi.create())
+        fun create(): GifsInteractorImpl {
+            return GifsInteractorImpl(GifsApi.create())
         }
     }
 }
