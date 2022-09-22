@@ -2,8 +2,11 @@ package com.shevy.gifapp.presentation.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var searchEditText: String
     private val interactor = GifsInteractorImpl.create()
 
-    private lateinit var vm: MainViewModel
+    private lateinit var viewModel: MainViewModel
 
     // TODO инициировать адаптер сразу здесть
     //private val adapter = ListenerSample(::onClick)
@@ -37,28 +40,31 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        vm = ViewModelProvider(this)[MainViewModel::class.java]
-
         val searchButton = binding.searchButton
         val recyclerView = binding.recyclerView
+
+        searchEditText = binding.searchEditText.text?.trim().toString()
+
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel.searchText.observe(this, Observer {
+            searchEditText = it
+        })
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
 
-        //binding.searchEditText.text = vm.resultLiveMutable.value
-        checkSearchEditText(savedInstanceState)
-
-/*        vm.resultLive.observe(this) { text ->
-            binding.searchEditText.text = text
-        }*/
-
         searchButton.setOnClickListener {
             searchEditText = binding.searchEditText.text?.trim().toString()
+            viewModel.searchText.value = searchEditText
 
-            lifecycleScope.launch {
-                val gifs = interactor.getSearchingGifs(searchEditText).await()
-                adapter.setGifs(gifs)
+            if (searchEditText.isEmpty()) {
+                Toast.makeText(this, "Enter text", Toast.LENGTH_SHORT).show()
+            } else {
+                lifecycleScope.launch {
+                    val gifs = interactor.getSearchingGifs(searchEditText).await()
+                    adapter.setGifs(gifs)
+                }
             }
 
             val imm: InputMethodManager =
@@ -73,23 +79,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkSearchEditText(savedInstanceState: Bundle?) {
-        searchEditText = binding.searchEditText.text?.trim().toString()
-        if (savedInstanceState != null) {
-            searchEditText = savedInstanceState.getString("search").toString()
-        }
-    }
-
     private suspend fun getApiResponse(): List<Gif> {
-        return if (searchEditText.isEmpty()) {
+        return if (viewModel.searchText.value.isNullOrEmpty()) {
             interactor.getTrendingGifs().await()
         } else {
-            interactor.getSearchingGifs(searchEditText).await()
+            interactor.getSearchingGifs(viewModel.searchText.value.toString()).await()
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("search", binding.searchEditText.text.toString())
     }
 }
