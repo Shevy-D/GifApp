@@ -2,12 +2,10 @@ package com.shevy.gifapp.presentation.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -16,13 +14,15 @@ import com.shevy.gifapp.data.GifsInteractorImpl
 import com.shevy.gifapp.databinding.ActivityMainBinding
 import com.shevy.gifapp.presentation.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var searchEditText: String
     private val interactor = GifsInteractorImpl.create()
 
-    private lateinit var viewModel: MainViewModel
+    //private lateinit var viewModel: MainViewModel
+    private val viewModel by viewModel<MainViewModel>()
 
     // TODO инициировать адаптер сразу здесть
     //private val adapter = ListenerSample(::onClick)
@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
 
         searchEditText = binding.searchEditText.text?.trim().toString()
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.searchText.observe(this, Observer {
             searchEditText = it
         })
