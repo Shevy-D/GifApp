@@ -1,20 +1,19 @@
-package com.shevy.gifapp.app
+package com.shevy.gifapp.di
 
 import android.app.Application
-import com.shevy.gifapp.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
-class App : Application() {
+class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
         startKoin {
             androidLogger(Level.DEBUG)
-            androidContext(this@App)
+            androidContext(this@MainApplication)
             modules(listOf(appModule))
         }
     }

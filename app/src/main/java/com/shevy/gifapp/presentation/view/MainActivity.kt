@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var searchEditText: String
     private val interactor = GifsInteractorImpl.create()
 
-    //private lateinit var viewModel: MainViewModel
     private val viewModel by viewModel<MainViewModel>()
 
     // TODO инициировать адаптер сразу здесть
