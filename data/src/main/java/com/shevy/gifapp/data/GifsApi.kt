@@ -28,12 +28,12 @@ interface GifsApi {
     companion object {
         var BASE_URL = "https://api.giphy.com/"
 
-        fun create(): GifsApi {
-            val retrofit = Retrofit.Builder()
-                .addConverterFactory(MoshiConverterFactory.create())
-                .baseUrl(BASE_URL)
-                .build()
-            return retrofit.create(GifsApi::class.java)
-        }
+//        fun create(): GifsApi {
+//            val retrofit = Retrofit.Builder()
+//                .addConverterFactory(MoshiConverterFactory.create())
+//                .baseUrl(BASE_URL)
+//                .build()
+//            return retrofit.create(GifsApi::class.java)
+//        }
     }
 }

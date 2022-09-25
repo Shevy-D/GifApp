@@ -1,5 +1,6 @@
 package com.shevy.gifapp.data
 
+import com.shevy.gifapp.domain.interactors.Gif
 import com.shevy.gifapp.domain.interactors.GifInteractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -40,4 +41,3 @@ class GifsInteractorImpl(private val api: GifsApi): GifInteractor {
     }
 }
 
-class Gif(val previewUrl: String, val url: String)

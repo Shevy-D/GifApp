@@ -7,34 +7,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.shevy.gifapp.R
-import com.shevy.gifapp.data.Gif
 import com.shevy.gifapp.databinding.RecyclerviewItemBinding
+import com.shevy.gifapp.domain.interactors.Gif
 
 class GifsAdapter(
     private val onGifSelected: ((gif: Gif) -> Unit)
 ) :
     RecyclerView.Adapter<GifsAdapter.GifsViewHolder>() {
 
-    private val gif = mutableListOf<Gif>()
+    private val gifs = mutableListOf<Gif>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setGifs(gifs: List<Gif>) {
-        this.gif.apply {
+    fun setGifs(newGifs: List<Gif>) {
+        gifs.apply {
             clear()
-            addAll(gifs)
+            addAll(newGifs)
         }
         notifyDataSetChanged()
         //notifyItemChanged()
-    }
-
-    inner class GifsViewHolder(item: View, private val onGifSelected: (gif: Gif) -> Unit) :
-        RecyclerView.ViewHolder(item) {
-        private val binding = RecyclerviewItemBinding.bind(item)
-        val imageView = binding.imageView
-
-        init {
-            itemView.setOnClickListener { onGifSelected(gif[adapterPosition]) }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifsViewHolder {
@@ -45,9 +35,19 @@ class GifsAdapter(
     }
 
     override fun onBindViewHolder(holder: GifsViewHolder, position: Int) {
-        val itemsGifs = gif[position]
+        val itemsGifs = gifs[position]
         Glide.with(holder.imageView.context).load(itemsGifs.previewUrl).into(holder.imageView)
     }
 
-    override fun getItemCount(): Int = gif.size
+    override fun getItemCount(): Int = gifs.size
+
+    inner class GifsViewHolder(item: View, private val onGifSelected: (gif: Gif) -> Unit) :
+        RecyclerView.ViewHolder(item) {
+        private val binding = RecyclerviewItemBinding.bind(item)
+        val imageView = binding.imageView
+
+        init {
+            itemView.setOnClickListener { onGifSelected(gifs[adapterPosition]) }
+        }
+    }
 }

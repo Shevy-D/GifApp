@@ -17,8 +17,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.shevy.gifapp.databinding.ActivitySecondBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class SecondActivity : AppCompatActivity() {
@@ -129,7 +134,7 @@ class SecondActivity : AppCompatActivity() {
         val downloadId = downloadManager.enqueue(request)
         val query = DownloadManager.Query().setFilterById(downloadId)
 
-        Thread {
+        lifecycleScope.launch {
             var downloading = true
             while (downloading) {
                 val cursor: Cursor = downloadManager.query(query)
@@ -140,14 +145,36 @@ class SecondActivity : AppCompatActivity() {
                 val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                 msg = statusMessage(url, directory, status)
                 if (msg != lastMsg) {
-                    this.runOnUiThread {
-                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@SecondActivity, msg, Toast.LENGTH_LONG).show()
                     }
                     lastMsg = msg ?: ""
                 }
                 cursor.close()
+
+                delay(1000)
             }
-        }.start()
+        }
+
+//        Thread {
+//            var downloading = true
+//            while (downloading) {
+//                val cursor: Cursor = downloadManager.query(query)
+//                cursor.moveToFirst()
+//                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+//                    downloading = false
+//                }
+//                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+//                msg = statusMessage(url, directory, status)
+//                if (msg != lastMsg) {
+//                    this.runOnUiThread {
+//                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+//                    }
+//                    lastMsg = msg ?: ""
+//                }
+//                cursor.close()
+//            }
+//        }.start()
     }
 
     private fun statusMessage(url: String, directory: File, status: Int): String? {

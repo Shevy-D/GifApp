@@ -2,24 +2,24 @@ package com.shevy.gifapp.presentation.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.shevy.gifapp.data.Gif
-import com.shevy.gifapp.data.GifsInteractorImpl
 import com.shevy.gifapp.databinding.ActivityMainBinding
+import com.shevy.gifapp.domain.interactors.Gif
+import com.shevy.gifapp.domain.interactors.GifInteractor
 import com.shevy.gifapp.presentation.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var searchEditText: String
-    private val interactor = GifsInteractorImpl.create()
+    private val interactor: GifInteractor by inject()
+//    private val interactor = GifsInteractorImpl.create()
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -48,26 +48,38 @@ class MainActivity : AppCompatActivity() {
             searchEditText = it
         })
 
+        viewModel.gifs.observe(this, Observer {
+            adapter.setGifs(it)
+        })
+
+        viewModel.loading.observe(this, Observer {
+            binding.loading.isVisible = it
+        })
+
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
 
         searchButton.setOnClickListener {
-            searchEditText = binding.searchEditText.text?.trim().toString()
-            viewModel.searchText.value = searchEditText
 
-            if (searchEditText.isEmpty()) {
-                Toast.makeText(this, "Enter text", Toast.LENGTH_SHORT).show()
-            } else {
-                lifecycleScope.launch {
-                    val gifs = interactor.getSearchingGifs(searchEditText).await()
-                    adapter.setGifs(gifs)
-                }
-            }
+            viewModel.onSearchTextChanged(binding.searchEditText.text.toString())
 
-            val imm: InputMethodManager =
-                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+
+//            searchEditText = binding.searchEditText.text?.trim().toString()
+//            viewModel.searchText.value = searchEditText
+//
+//            if (searchEditText.isEmpty()) {
+//                Toast.makeText(this, "Enter text", Toast.LENGTH_SHORT).show()
+//            } else {
+//                lifecycleScope.launch {
+//                    val gifs = interactor.getSearchingGifs(searchEditText).await()
+//                    adapter.setGifs(gifs)
+//                }
+//            }
+//
+//            val imm: InputMethodManager =
+//                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
 
         lifecycleScope.launch {

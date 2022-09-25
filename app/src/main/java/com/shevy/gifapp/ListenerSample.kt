@@ -1,6 +1,6 @@
 package com.shevy.gifapp
 
-import com.shevy.gifapp.data.Gif
+import com.shevy.gifapp.domain.interactors.Gif
 
 
 class ListenerSample(private val onClick: (gif: Gif) -> Unit) {
