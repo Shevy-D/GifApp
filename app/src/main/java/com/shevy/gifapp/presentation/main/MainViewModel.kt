@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shevy.gifapp.domain.interactors.Gif
 import com.shevy.gifapp.domain.interactors.GifInteractor
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val interactor: GifInteractor) : ViewModel() {
@@ -26,6 +27,9 @@ class MainViewModel(private val interactor: GifInteractor) : ViewModel() {
         viewModelScope.launch {
             val gifs = interactor.getSearchingGifs(text).await()
             _gifs.postValue(gifs)
+
+            delay(1000)
+
             _loading.postValue(false)
         }
     }

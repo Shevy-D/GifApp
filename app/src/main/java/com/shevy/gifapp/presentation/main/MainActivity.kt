@@ -1,8 +1,10 @@
 package com.shevy.gifapp.presentation.main
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     //read about it inject()
     private val interactor: GifInteractor by inject()
-//    private val interactor = GifsInteractorImpl.create()
+    //private val interactor = GifsInteractorImpl.create()
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -51,9 +53,9 @@ class MainActivity : AppCompatActivity() {
             adapter.setGifs(it)
         })
 
-/*        viewModel.loading.observe(this, Observer {
-            binding.loading.isVisible = it
-        })*/
+        viewModel.loading.observe(this, Observer { loading ->
+            binding.loadingText.isVisible = loading
+        })
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
@@ -63,27 +65,24 @@ class MainActivity : AppCompatActivity() {
 
             viewModel.onSearchTextChanged(binding.searchEditText.text.toString())
 
+/*            if (searchEditText.isEmpty()) {
+                Toast.makeText(this, "Enter text", Toast.LENGTH_SHORT).show()
+            } else {
+                lifecycleScope.launch {
+                    val gifs = interactor.getSearchingGifs(searchEditText).await()
+                    adapter.setGifs(gifs)
+                }
+            }
+*/
 
-//            searchEditText = binding.searchEditText.text?.trim().toString()
-//            viewModel.searchText.value = searchEditText
-//
-//            if (searchEditText.isEmpty()) {
-//                Toast.makeText(this, "Enter text", Toast.LENGTH_SHORT).show()
-//            } else {
-//                lifecycleScope.launch {
-//                    val gifs = interactor.getSearchingGifs(searchEditText).await()
-//                    adapter.setGifs(gifs)
-//                }
-//            }
-//
 //            val imm: InputMethodManager =
 //                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 //            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        }
 
-        lifecycleScope.launch {
-            val gifs = getApiResponse()
-            adapter.setGifs(gifs)
+            lifecycleScope.launch {
+                val gifs = getApiResponse()
+                adapter.setGifs(gifs)
+            }
         }
     }
 
