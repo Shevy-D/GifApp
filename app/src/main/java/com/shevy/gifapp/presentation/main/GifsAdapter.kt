@@ -1,4 +1,4 @@
-package com.shevy.gifapp.presentation.view
+package com.shevy.gifapp.presentation.main
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.shevy.gifapp.R
 import com.shevy.gifapp.databinding.RecyclerviewItemBinding
 import com.shevy.gifapp.domain.interactors.Gif
+import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation
 
 class GifsAdapter(
     private val onGifSelected: ((gif: Gif) -> Unit)
@@ -24,7 +27,6 @@ class GifsAdapter(
             addAll(newGifs)
         }
         notifyDataSetChanged()
-        //notifyItemChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifsViewHolder {
@@ -36,7 +38,9 @@ class GifsAdapter(
 
     override fun onBindViewHolder(holder: GifsViewHolder, position: Int) {
         val itemsGifs = gifs[position]
-        Glide.with(holder.imageView.context).load(itemsGifs.previewUrl).into(holder.imageView)
+        Glide.with(holder.imageView.context)
+            .load(itemsGifs.previewUrl)
+            .into(holder.imageView)
     }
 
     override fun getItemCount(): Int = gifs.size

@@ -35,9 +35,9 @@ class GifsInteractorImpl(private val api: GifsApi): GifInteractor {
         private const val lang = "en"
 
 
-        fun create(): GifsInteractorImpl {
+/*        fun create(): GifsInteractorImpl {
             return GifsInteractorImpl(GifsApi.create())
-        }
+        }*/
     }
 }
 

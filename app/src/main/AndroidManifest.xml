@@ -22,10 +22,10 @@
         android:theme="@style/Theme.GifApp"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.view.SecondActivity"
+            android:name=".presentation.detail.DetailActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.view.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -34,6 +34,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--        <receiver android:name=".presentation.detail.DownloadBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+            </intent-filter>
+        </receiver>-->
     </application>
+
 
 </manifest>

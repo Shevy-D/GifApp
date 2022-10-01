@@ -1,4 +1,4 @@
-package com.shevy.gifapp.presentation.viewmodel
+package com.shevy.gifapp.presentation.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

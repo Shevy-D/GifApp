@@ -1,4 +1,4 @@
-package com.shevy.gifapp.presentation.view
+package com.shevy.gifapp.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.databinding.ActivityMainBinding
 import com.shevy.gifapp.domain.interactors.Gif
 import com.shevy.gifapp.domain.interactors.GifInteractor
-import com.shevy.gifapp.presentation.viewmodel.MainViewModel
+import com.shevy.gifapp.presentation.detail.DetailActivity
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,18 +18,17 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var searchEditText: String
+
+    //read about it inject()
     private val interactor: GifInteractor by inject()
 //    private val interactor = GifsInteractorImpl.create()
 
     private val viewModel by viewModel<MainViewModel>()
 
-    // TODO инициировать адаптер сразу здесть
-    //private val adapter = ListenerSample(::onClick)
     private val adapter = GifsAdapter(::onClick)
-    //adapter.addGifs(gifs)
 
     private fun onClick(gif: Gif) {
-        val intent = Intent(this@MainActivity, SecondActivity::class.java)
+        val intent = Intent(this@MainActivity, DetailActivity::class.java)
         intent.putExtra("url", gif.url)
         startActivity(intent)
     }
@@ -52,9 +51,9 @@ class MainActivity : AppCompatActivity() {
             adapter.setGifs(it)
         })
 
-        viewModel.loading.observe(this, Observer {
+/*        viewModel.loading.observe(this, Observer {
             binding.loading.isVisible = it
-        })
+        })*/
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
@@ -84,7 +83,6 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val gifs = getApiResponse()
-            // TODO положить гифки в адаптер
             adapter.setGifs(gifs)
         }
     }

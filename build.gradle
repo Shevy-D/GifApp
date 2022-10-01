@@ -6,6 +6,12 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.7.10' apply false
 }
 
+ext {
+    versions = [
+            koin_version = "3.2.1"
+    ]
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

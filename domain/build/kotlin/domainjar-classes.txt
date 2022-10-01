@@ -1,1 +1,1 @@
-C:\Users\dmitr\AndroidStudioProjects\GifApp\domain\build\classes\kotlin\main\com\shevy\gifapp\domain\interactors\GifInteractor.class
+C:\Users\dmitr\AndroidStudioProjects\GifApp\domain\build\classes\kotlin\main\com\shevy\gifapp\domain\interactors\Gif.class;C:\Users\dmitr\AndroidStudioProjects\GifApp\domain\build\classes\kotlin\main\com\shevy\gifapp\domain\interactors\GifInteractor.class
