@@ -2,13 +2,12 @@ package com.shevy.gifapp.presentation.main
 
 import com.shevy.gifapp.data.GifsInteractorImpl
 import com.shevy.gifapp.domain.interactors.Gif
-import com.shevy.gifapp.domain.interactors.GifInteractor
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.runBlocking
-import org.junit.Rule
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.kotlin.mock
 
 //@OptIn(ExperimentalCoroutinesApi::class)
@@ -17,6 +16,28 @@ class MainViewModelTest2 {
 /*    @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()*/
+
+    @Test
+    fun getSearchTextV2() = runBlocking {
+        // setup
+        val interactorTest = mock<GifsInteractorImpl>()
+        val testData = listOf(
+            Gif("test preview url", "test url"),
+            Gif("test preview url2", "test url2")
+        )
+        val text = "Test"
+        val result = mock<Deferred<List<Gif>>>()
+        `when`(result.await()).thenReturn(testData)
+        `when`(interactorTest.getSearchingGifs(text)).thenReturn(result)
+        val viewModel = MainViewModel(interactorTest)
+
+        // action
+        viewModel.onSearchTextChanged(text = text)
+
+        // check
+        val actual = viewModel.searchText.value
+        Assertions.assertEquals(text, actual)
+    }
 
     @Test
     suspend fun getSearchText() {
@@ -112,5 +133,4 @@ class MainViewModelTest2 {
 }
 
     */
-
 }
