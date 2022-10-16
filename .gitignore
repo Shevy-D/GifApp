@@ -4,7 +4,7 @@
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
-/.idea/workspace.xml
+/.idea/workspace.xmlK
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+/domain/build/
+/data/build/
+/.idea/
