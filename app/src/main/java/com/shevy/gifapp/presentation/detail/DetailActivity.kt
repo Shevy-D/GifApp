@@ -1,7 +1,6 @@
 package com.shevy.gifapp.presentation.detail
 
 import android.Manifest
-import android.R
 import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.*
@@ -12,31 +11,36 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.shevy.gifapp.room.model.Favorite
+import com.shevy.gifapp.room.viewmodel.FavoriteViewModel
 import com.shevy.gifapp.databinding.ActivitySecondBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import com.shevy.gifapp.room.repository.FavoriteRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import kotlin.properties.Delegates
-
 
 class DetailActivity : AppCompatActivity() {
     lateinit var binding: ActivitySecondBinding
     lateinit var url: String
+    lateinit var previewUrl: String
 
     var downloadId by Delegates.notNull<Long>()
     lateinit var downloadManager: DownloadManager
     var status by Delegates.notNull<Int>()
+
+    //private val favRepo: FavoriteRepository by inject()
+    private val favoriteViewModel by viewModel<FavoriteViewModel>()
+    //private val favoriteViewModel: FavoriteViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +49,10 @@ class DetailActivity : AppCompatActivity() {
 
         val detailImageView = binding.detailImageView
         val downloadButton = binding.downloadButton
+        val checkBoxFavorite = binding.cbFavorite
 
         url = intent.getStringExtra("url").toString()
+        previewUrl = intent.getStringExtra("previewUrl").toString()
         Glide.with(this@DetailActivity).load(url).into(detailImageView)
 
         downloadButton.setOnClickListener {
@@ -54,6 +60,31 @@ class DetailActivity : AppCompatActivity() {
                 askPermissions()
             } else {
                 downloadImage(url)
+            }
+        }
+
+        checkBoxFavorite.setOnCheckedChangeListener { checkBox, isChecked ->
+            if (isChecked) {
+                val favorite = Favorite(0, previewUrl, url)
+
+                //save the favorite to room database
+                lifecycleScope.launch {
+                    favoriteViewModel.insertFavorite(favorite)
+                }
+                Toast.makeText(this@DetailActivity, "Item added to Wishlist", Toast.LENGTH_SHORT)
+                    .show()
+
+/*                favoriteViewModel.favorite.observe(this, Observer {
+                    Toast.makeText(
+                        this@DetailActivity,
+                        "Item added to Wishlist",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                })*/
+
+            } else {
+                Toast.makeText(this@DetailActivity, "Item removed to Wishlist", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -216,7 +247,7 @@ class DetailActivity : AppCompatActivity() {
 
         downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
-        val request = DownloadManager.Request(Uri.parse(LINK)).apply {
+        val request = DownloadManager.Request(Uri.parse(url)).apply {
             setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
                 .setAllowedOverRoaming(false)
                 .setTitle(url.substring(url.lastIndexOf("/") + 1))

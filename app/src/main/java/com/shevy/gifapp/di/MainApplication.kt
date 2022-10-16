@@ -14,7 +14,7 @@ class MainApplication : Application() {
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@MainApplication)
-            modules(listOf(appModule))
+            modules(listOf(appModule, favoriteModule))
         }
     }
 }
