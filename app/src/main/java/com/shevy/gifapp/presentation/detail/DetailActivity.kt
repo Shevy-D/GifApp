@@ -16,16 +16,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.shevy.gifapp.room.model.Favorite
 import com.shevy.gifapp.room.viewmodel.FavoriteViewModel
 import com.shevy.gifapp.databinding.ActivitySecondBinding
-import com.shevy.gifapp.room.repository.FavoriteRepository
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import kotlin.properties.Delegates
 
@@ -38,9 +35,10 @@ class DetailActivity : AppCompatActivity() {
     lateinit var downloadManager: DownloadManager
     var status by Delegates.notNull<Int>()
 
-    //private val favRepo: FavoriteRepository by inject()
-    private val favoriteViewModel by viewModel<FavoriteViewModel>()
+    //private val favRepo: FavoriteRepositoryImpl by inject()
+    //private val favoriteViewModel by viewModel<FavoriteViewModel>()
     //private val favoriteViewModel: FavoriteViewModel by viewModel()
+    private lateinit var favoriteViewModel: FavoriteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +48,9 @@ class DetailActivity : AppCompatActivity() {
         val detailImageView = binding.detailImageView
         val downloadButton = binding.downloadButton
         val checkBoxFavorite = binding.cbFavorite
+
+        favoriteViewModel = ViewModelProvider(this)[FavoriteViewModel::class.java]
+        favoriteViewModel.initDatabase()
 
         url = intent.getStringExtra("url").toString()
         previewUrl = intent.getStringExtra("previewUrl").toString()
@@ -65,29 +66,22 @@ class DetailActivity : AppCompatActivity() {
 
         checkBoxFavorite.setOnCheckedChangeListener { checkBox, isChecked ->
             if (isChecked) {
-                val favorite = Favorite(0, previewUrl, url)
+                val favorite = Favorite(downsized = previewUrl, original = url)
 
                 //save the favorite to room database
                 lifecycleScope.launch {
-                    favoriteViewModel.insertFavorite(favorite)
-                }
-                Toast.makeText(this@DetailActivity, "Item added to Wishlist", Toast.LENGTH_SHORT)
-                    .show()
-
-/*                favoriteViewModel.favorite.observe(this, Observer {
+                    favoriteViewModel.insertFavorite(favorite) {}
                     Toast.makeText(
                         this@DetailActivity,
                         "Item added to Wishlist",
                         Toast.LENGTH_SHORT
                     ).show()
-                })*/
-
+                }
             } else {
                 Toast.makeText(this@DetailActivity, "Item removed to Wishlist", Toast.LENGTH_SHORT)
                     .show()
             }
         }
-
         registerReceiver(broadcastReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
     }
 

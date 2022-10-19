@@ -11,7 +11,7 @@ interface FavoriteDao {
     fun getAllFavorites(): LiveData<List<Favorite>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertFavoriteToRoomDatabase(favorite: Favorite) : Long
+    suspend fun insertFavorite(favorite: Favorite)
 
     @Delete
     suspend fun deleteFavorite(favorite: Favorite)

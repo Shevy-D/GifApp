@@ -1,22 +1,15 @@
 package com.shevy.gifapp.room.repository
 
 import androidx.lifecycle.LiveData
-import com.shevy.gifapp.room.data.FavoriteDao
 import com.shevy.gifapp.room.model.Favorite
 
-class FavoriteRepository(private val favoriteDao: FavoriteDao) {
+interface FavoriteRepository {
 
-    val allFavorite: LiveData<List<Favorite>> = favoriteDao.getAllFavorites()
+    val allFavorites: LiveData<List<Favorite>>
 
-    suspend fun insertFavorite(favorite: Favorite) {
-        favoriteDao.insertFavoriteToRoomDatabase(favorite)
-    }
+    suspend fun insertFavorite(favorite: Favorite, onSuccess: () -> Unit)
 
-    suspend fun deleteFavorite(favorite: Favorite){
-        favoriteDao.deleteFavorite(favorite)
-    }
+    suspend fun deleteFavorite(favorite: Favorite, onSuccess: () -> Unit)
 
-    suspend fun deleteAll(){
-        favoriteDao.deleteAll()
-    }
+    suspend fun deleteAll(onSuccess: () -> Unit)
 }
