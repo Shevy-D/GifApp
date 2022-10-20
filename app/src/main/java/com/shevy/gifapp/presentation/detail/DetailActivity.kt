@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.shevy.gifapp.data.models.database.Favorite
-import com.shevy.gifapp.databinding.ActivitySecondBinding
+import com.shevy.gifapp.databinding.ActivityDetailBinding
 import com.shevy.gifapp.presentation.favorite.FavoriteViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,7 +30,7 @@ import java.io.File
 import kotlin.properties.Delegates
 
 class DetailActivity : AppCompatActivity() {
-    lateinit var binding: ActivitySecondBinding
+    lateinit var binding: ActivityDetailBinding
     lateinit var url: String
     lateinit var previewUrl: String
     lateinit var favorite: Favorite
@@ -44,11 +44,12 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySecondBinding.inflate(layoutInflater)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val detailImageView = binding.detailImageView
         val downloadButton = binding.downloadButton
+        val deleteButton = binding.deleteFavoriteButton
         val checkBoxFavorite = binding.cbFavorite
 
         favoriteViewModel.initDatabase()
@@ -87,16 +88,26 @@ class DetailActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-            registerReceiver(
-                broadcastReceiver,
-                IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-            )
         }
+
+        deleteButton.setOnClickListener {
+            favoriteViewModel.deleteFavorite(favorite)
+            Toast.makeText(
+                this@DetailActivity,
+                "Item removed to Wishlist",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        registerReceiver(
+            broadcastReceiver,
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        )
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        //unregisterReceiver(broadcastReceiver)
+        unregisterReceiver(broadcastReceiver)
     }
 
     private val broadcastReceiver = object : BroadcastReceiver() {

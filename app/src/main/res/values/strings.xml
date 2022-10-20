@@ -2,5 +2,6 @@
     <string name="app_name">GifApp</string>
     <string name="search_text">Search</string>
     <string name="download_text">Download</string>
+    <string name="delete_text">Delete</string>
     <string name="delete_all_text">Delete All</string>
 </resources>
