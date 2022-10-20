@@ -1,4 +1,4 @@
-package com.shevy.gifapp.data.models
+package com.shevy.gifapp.data.models.gif
 
 data class Original(
     val frames: String,

@@ -1,8 +1,6 @@
 package com.shevy.gifapp.data
 
-import com.shevy.gifapp.data.models.GiphyDC
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import com.shevy.gifapp.data.models.gif.GiphyDC
 import retrofit2.http.GET
 import retrofit2.http.Query
 

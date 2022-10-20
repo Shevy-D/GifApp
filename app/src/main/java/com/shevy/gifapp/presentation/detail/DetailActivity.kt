@@ -3,7 +3,10 @@ package com.shevy.gifapp.presentation.detail
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DownloadManager
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -16,13 +19,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.shevy.gifapp.room.model.Favorite
-import com.shevy.gifapp.room.viewmodel.FavoriteViewModel
+import com.shevy.gifapp.data.models.database.Favorite
 import com.shevy.gifapp.databinding.ActivitySecondBinding
+import com.shevy.gifapp.presentation.favorite.FavoriteViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import kotlin.properties.Delegates
 
@@ -30,15 +33,14 @@ class DetailActivity : AppCompatActivity() {
     lateinit var binding: ActivitySecondBinding
     lateinit var url: String
     lateinit var previewUrl: String
+    lateinit var favorite: Favorite
 
     var downloadId by Delegates.notNull<Long>()
     lateinit var downloadManager: DownloadManager
     var status by Delegates.notNull<Int>()
 
     //private val favRepo: FavoriteRepositoryImpl by inject()
-    //private val favoriteViewModel by viewModel<FavoriteViewModel>()
-    //private val favoriteViewModel: FavoriteViewModel by viewModel()
-    private lateinit var favoriteViewModel: FavoriteViewModel
+    private val favoriteViewModel by viewModel<FavoriteViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +51,12 @@ class DetailActivity : AppCompatActivity() {
         val downloadButton = binding.downloadButton
         val checkBoxFavorite = binding.cbFavorite
 
-        favoriteViewModel = ViewModelProvider(this)[FavoriteViewModel::class.java]
         favoriteViewModel.initDatabase()
 
         url = intent.getStringExtra("url").toString()
         previewUrl = intent.getStringExtra("previewUrl").toString()
         Glide.with(this@DetailActivity).load(url).into(detailImageView)
+        favorite = Favorite(downsized = previewUrl, original = url)
 
         downloadButton.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -65,29 +67,36 @@ class DetailActivity : AppCompatActivity() {
         }
 
         checkBoxFavorite.setOnCheckedChangeListener { checkBox, isChecked ->
-            if (isChecked) {
-                val favorite = Favorite(downsized = previewUrl, original = url)
-
-                //save the favorite to room database
-                lifecycleScope.launch {
-                    favoriteViewModel.insertFavorite(favorite) {}
+            when (isChecked) {
+                true -> {
+                    lifecycleScope.launch {
+                        favoriteViewModel.insertFavorite(favorite)
+                        Toast.makeText(
+                            this@DetailActivity,
+                            "Item added to Wishlist",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                false -> {
+                    favoriteViewModel.deleteFavorite(favorite)
                     Toast.makeText(
                         this@DetailActivity,
-                        "Item added to Wishlist",
+                        "Item removed to Wishlist",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            } else {
-                Toast.makeText(this@DetailActivity, "Item removed to Wishlist", Toast.LENGTH_SHORT)
-                    .show()
             }
+            registerReceiver(
+                broadcastReceiver,
+                IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+            )
         }
-        registerReceiver(broadcastReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(broadcastReceiver)
+        //unregisterReceiver(broadcastReceiver)
     }
 
     private val broadcastReceiver = object : BroadcastReceiver() {
@@ -135,11 +144,13 @@ class DetailActivity : AppCompatActivity() {
                 statusText = "STATUS_FAILED"
                 when (reason) {
                     DownloadManager.ERROR_CANNOT_RESUME -> reasonText = "ERROR_CANNOT_RESUME"
-                    DownloadManager.ERROR_DEVICE_NOT_FOUND -> reasonText = "ERROR_DEVICE_NOT_FOUND"
+                    DownloadManager.ERROR_DEVICE_NOT_FOUND -> reasonText =
+                        "ERROR_DEVICE_NOT_FOUND"
                     DownloadManager.ERROR_FILE_ALREADY_EXISTS -> reasonText =
                         "ERROR_FILE_ALREADY_EXISTS"
                     DownloadManager.ERROR_FILE_ERROR -> reasonText = "ERROR_FILE_ERROR"
-                    DownloadManager.ERROR_HTTP_DATA_ERROR -> reasonText = "ERROR_HTTP_DATA_ERROR"
+                    DownloadManager.ERROR_HTTP_DATA_ERROR -> reasonText =
+                        "ERROR_HTTP_DATA_ERROR"
                     DownloadManager.ERROR_INSUFFICIENT_SPACE -> reasonText =
                         "ERROR_INSUFFICIENT_SPACE"
                     DownloadManager.ERROR_TOO_MANY_REDIRECTS -> reasonText =
@@ -152,7 +163,8 @@ class DetailActivity : AppCompatActivity() {
             DownloadManager.STATUS_PAUSED -> {
                 statusText = "STATUS_PAUSED"
                 when (reason) {
-                    DownloadManager.PAUSED_QUEUED_FOR_WIFI -> reasonText = "PAUSED_QUEUED_FOR_WIFI"
+                    DownloadManager.PAUSED_QUEUED_FOR_WIFI -> reasonText =
+                        "PAUSED_QUEUED_FOR_WIFI"
                     DownloadManager.PAUSED_UNKNOWN -> reasonText = "PAUSED_UNKNOWN"
                     DownloadManager.PAUSED_WAITING_FOR_NETWORK -> reasonText =
                         "PAUSED_WAITING_FOR_NETWORK"

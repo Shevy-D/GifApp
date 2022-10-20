@@ -1,6 +1,6 @@
 package com.shevy.gifapp.di
 
-import com.shevy.gifapp.room.viewmodel.FavoriteViewModel
+import com.shevy.gifapp.presentation.favorite.FavoriteViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

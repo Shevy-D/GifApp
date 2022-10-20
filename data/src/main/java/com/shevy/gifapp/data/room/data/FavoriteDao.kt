@@ -1,8 +1,8 @@
-package com.shevy.gifapp.room.data
+package com.shevy.gifapp.data.room.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.shevy.gifapp.room.model.Favorite
+import com.shevy.gifapp.data.models.database.Favorite
 
 @Dao
 interface FavoriteDao {

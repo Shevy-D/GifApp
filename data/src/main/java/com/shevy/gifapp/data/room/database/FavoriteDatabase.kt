@@ -1,20 +1,18 @@
-package com.shevy.gifapp.room.database
+package com.shevy.gifapp.data.room.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.shevy.gifapp.room.data.FavoriteDao
-import com.shevy.gifapp.room.model.Favorite
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.shevy.gifapp.data.room.data.FavoriteDao
+import com.shevy.gifapp.data.models.database.Favorite
 
 @Database(entities = [Favorite::class], version = 1)
 abstract class FavoriteDatabase : RoomDatabase() {
     abstract fun getFavoriteDao(): FavoriteDao
 
     companion object {
+        @Volatile
         private var database: FavoriteDatabase? = null
 
         @Synchronized
@@ -29,7 +27,6 @@ abstract class FavoriteDatabase : RoomDatabase() {
             }
         }
     }
-
 /*    private class FavoriteDatabaseCallback(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
@@ -68,41 +65,4 @@ abstract class FavoriteDatabase : RoomDatabase() {
             }
         }
     }*/
-
-/*    companion object {
-        @Volatile
-        private var INSTANCE: FavoriteDatabase? = null
-
-        fun getDatabase(context: Context): FavoriteDatabase {
-
-            val tempInstance = INSTANCE
-            if (tempInstance != null) {
-                return tempInstance
-            }
-
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    FavoriteDatabase::class.java,
-                    "favorite_database"
-                ).build()
-                INSTANCE = instance
-                return instance
-            }
-        }
-    }*/
-
-/*    companion object {
-        private var database: FavoriteDatabase? = null
-
-        @Synchronized
-        fun getDatabase(context: Context): FavoriteDatabase {
-            return if (database == null) {
-                database = Room.databaseBuilder(context, FavoriteDatabase::class.java, "db").build()
-                database as FavoriteDatabase
-            } else
-                database as FavoriteDatabase
-        }
-    }*/
-
 }

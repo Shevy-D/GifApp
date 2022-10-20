@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.shevy.gifapp.R
 import com.shevy.gifapp.databinding.RecyclerviewItemBinding
-import com.shevy.gifapp.room.model.Favorite
+import com.shevy.gifapp.data.models.database.Favorite
 
 class FavoritesAdapter(
 private val onFavoriteSelected: ((favorites: Favorite) -> Unit)
