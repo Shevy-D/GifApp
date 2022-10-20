@@ -30,13 +30,13 @@ import java.io.File
 import kotlin.properties.Delegates
 
 class DetailActivity : AppCompatActivity() {
-    lateinit var binding: ActivityDetailBinding
-    lateinit var url: String
-    lateinit var previewUrl: String
-    lateinit var favorite: Favorite
+    private lateinit var binding: ActivityDetailBinding
+    private lateinit var url: String
+    private lateinit var previewUrl: String
+    private lateinit var favorite: Favorite
 
-    var downloadId by Delegates.notNull<Long>()
-    lateinit var downloadManager: DownloadManager
+    private var downloadId by Delegates.notNull<Long>()
+    private lateinit var downloadManager: DownloadManager
     var status by Delegates.notNull<Int>()
 
     //private val favRepo: FavoriteRepositoryImpl by inject()
