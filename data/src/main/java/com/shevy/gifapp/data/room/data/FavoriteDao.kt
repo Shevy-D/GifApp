@@ -13,8 +13,11 @@ interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFavorite(favorite: Favorite)
 
-    @Delete
-    suspend fun deleteFavorite(favorite: Favorite)
+/*    @Delete
+    suspend fun deleteFavorite(favorite: Favorite)*/
+
+    @Query("DELETE FROM favorite_database WHERE previewUrl = :url")
+    suspend fun deleteByUrl(url: String)
 
     @Query("DELETE FROM favorite_database")
     suspend fun deleteAll()

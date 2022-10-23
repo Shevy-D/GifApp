@@ -13,8 +13,12 @@ class FavoriteRepositoryImpl(private val favoriteDao: FavoriteDao) : FavoriteRep
        favoriteDao.insertFavorite(favorite)
     }
 
-    override suspend fun deleteFavorite(favorite: Favorite) {
+/*    override suspend fun deleteFavorite(favorite: Favorite) {
         favoriteDao.deleteFavorite(favorite)
+    }*/
+
+    override suspend fun deleteByUrl(url: String) {
+        favoriteDao.deleteByUrl(url)
     }
 
     override suspend fun deleteAll() {

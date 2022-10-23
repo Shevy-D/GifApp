@@ -49,7 +49,6 @@ class DetailActivity : AppCompatActivity() {
 
         val detailImageView = binding.detailImageView
         val downloadButton = binding.downloadButton
-        val deleteButton = binding.deleteFavoriteButton
         val checkBoxFavorite = binding.cbFavorite
 
         favoriteViewModel.initDatabase()
@@ -80,7 +79,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
                 false -> {
-                    favoriteViewModel.deleteFavorite(favorite)
+                    favoriteViewModel.deleteByUrl(previewUrl)
                     Toast.makeText(
                         this@DetailActivity,
                         "Item removed to Wishlist",
@@ -90,14 +89,14 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-        deleteButton.setOnClickListener {
-            favoriteViewModel.deleteFavorite(favorite)
+/*        deleteButton.setOnClickListener {
+            favoriteViewModel.deleteByUrl(previewUrl)
             Toast.makeText(
                 this@DetailActivity,
                 "Item removed to Wishlist",
                 Toast.LENGTH_SHORT
             ).show()
-        }
+        }*/
 
         registerReceiver(
             broadcastReceiver,
@@ -115,8 +114,7 @@ class DetailActivity : AppCompatActivity() {
 
 /*          val reference = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             val action = intent?.action
-            while (DownloadManager.ACTION_DOWNLOAD_COMPLETE != action) {
-*/
+            while (DownloadManager.ACTION_DOWNLOAD_COMPLETE != action) {*/
 
             var msg = ""
             Log.d("Status", status.toString())

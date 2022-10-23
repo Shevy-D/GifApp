@@ -30,9 +30,15 @@ class FavoriteViewModel(application: Application) :
         }
     }
 
-    fun deleteFavorite(favorite: Favorite) {
+/*    fun deleteFavorite(favorite: Favorite) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteFavorite(favorite)
+        }
+    }*/
+
+    fun deleteByUrl(url: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteByUrl(url)
         }
     }
 
