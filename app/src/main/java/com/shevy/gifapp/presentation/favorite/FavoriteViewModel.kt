@@ -33,31 +33,21 @@ class FavoriteViewModel(application: Application) :
         }
     }
 
-/*    fun updateFavorite(favorite: Favorite) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.updateFavorite(favorite)
-        }
-    }*/
-
-/*    fun getFavorite(favorite: Favorite): LiveData<Favorite> {
-        return repository.getFavorite(favorite.id)
-    }*/
-
-    suspend fun getByUrl(url: String): Favorite {
+    suspend fun getFavoriteByUrl(url: String): Favorite {
         return viewModelScope.async(Dispatchers.IO) {
-            return@async repository.getByUrl(url)
+            return@async repository.getFavoriteByUrl(url)
         }.await()
     }
 
-    fun deleteByUrl(url: String) {
+    fun deleteFavoriteByUrl(url: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteByUrl(url)
+            repository.deleteFavoriteByUrl(url)
         }
     }
 
-    fun deleteAllFavorite() {
+    fun deleteAllFavorites() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteAll()
+            repository.deleteAllFavorites()
         }
     }
 }

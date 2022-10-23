@@ -67,7 +67,7 @@ class DetailActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             favorite = async {
-                return@async favoriteViewModel.getByUrl(previewUrl)
+                return@async favoriteViewModel.getFavoriteByUrl(previewUrl)
             }.await() ?: Favorite(downsized = previewUrl, original = url)
             checkBoxFavorite.isChecked = favorite.liked
         }
@@ -100,7 +100,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
                 false -> {
-                    favoriteViewModel.deleteByUrl(previewUrl)
+                    favoriteViewModel.deleteFavoriteByUrl(previewUrl)
 /*                    Toast.makeText(
                         this@DetailActivity,
                         "Item removed to Wishlist",

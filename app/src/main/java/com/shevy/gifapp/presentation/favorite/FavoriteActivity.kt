@@ -47,7 +47,7 @@ class FavoriteActivity : AppCompatActivity() {
         }
 
         testButton.setOnClickListener {
-            favoriteViewModel.deleteAllFavorite()
+            favoriteViewModel.deleteAllFavorites()
         }
     }
 }

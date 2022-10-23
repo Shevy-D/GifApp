@@ -13,27 +13,15 @@ class FavoriteRepositoryImpl(private val favoriteDao: FavoriteDao) : FavoriteRep
        favoriteDao.insertFavorite(favorite)
     }
 
-/*    override suspend fun updateFavorite(favorite: Favorite) {
-        favoriteDao.updateFavorite(favorite)
-    }*/
-
-/*    override fun getFavorite(id: Int): LiveData<Favorite> {
-        return favoriteDao.getFavorite(id)
-    }*/
-
-/*    override suspend fun getByUrl(url: String): Favorite {
-        return favoriteDao.getByUrl(url)
-    }*/
-
-    override suspend fun getByUrl(url: String): Favorite {
-        return favoriteDao.getByUrl(url)
+    override suspend fun getFavoriteByUrl(url: String): Favorite {
+        return favoriteDao.getFavoriteByUrl(url)
     }
 
-    override suspend fun deleteByUrl(url: String) {
-        favoriteDao.deleteByUrl(url)
+    override suspend fun deleteFavoriteByUrl(url: String) {
+        favoriteDao.deleteFavoriteByUrl(url)
     }
 
-    override suspend fun deleteAll() {
-        favoriteDao.deleteAll()
+    override suspend fun deleteAllFavorites() {
+        favoriteDao.deleteAllFavorites()
     }
 }
