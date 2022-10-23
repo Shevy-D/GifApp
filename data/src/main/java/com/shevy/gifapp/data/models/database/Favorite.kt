@@ -14,5 +14,7 @@ data class Favorite(
     val downsized: String,
 
     @ColumnInfo(name = "url", typeAffinity = TEXT)
-    val original: String
+    val original: String,
+
+    var liked: Boolean = false
 )

@@ -14,6 +14,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.shevy.gifapp.data.models.database.Favorite
 import com.shevy.gifapp.databinding.ActivityDetailBinding
 import com.shevy.gifapp.presentation.favorite.FavoriteViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
@@ -39,7 +41,6 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var downloadManager: DownloadManager
     var status by Delegates.notNull<Int>()
 
-    //private val favRepo: FavoriteRepositoryImpl by inject()
     private val favoriteViewModel by viewModel<FavoriteViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,11 +53,9 @@ class DetailActivity : AppCompatActivity() {
         val checkBoxFavorite = binding.cbFavorite
 
         favoriteViewModel.initDatabase()
-
         url = intent.getStringExtra("url").toString()
         previewUrl = intent.getStringExtra("previewUrl").toString()
         Glide.with(this@DetailActivity).load(url).into(detailImageView)
-        favorite = Favorite(downsized = previewUrl, original = url)
 
         downloadButton.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -66,37 +65,14 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-        checkBoxFavorite.setOnCheckedChangeListener { checkBox, isChecked ->
-            when (isChecked) {
-                true -> {
-                    lifecycleScope.launch {
-                        favoriteViewModel.insertFavorite(favorite)
-                        Toast.makeText(
-                            this@DetailActivity,
-                            "Item added to Wishlist",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                false -> {
-                    favoriteViewModel.deleteByUrl(previewUrl)
-                    Toast.makeText(
-                        this@DetailActivity,
-                        "Item removed to Wishlist",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+        lifecycleScope.launch {
+            favorite = async {
+                return@async favoriteViewModel.getByUrl(previewUrl)
+            }.await() ?: Favorite(downsized = previewUrl, original = url)
+            checkBoxFavorite.isChecked = favorite.liked
         }
 
-/*        deleteButton.setOnClickListener {
-            favoriteViewModel.deleteByUrl(previewUrl)
-            Toast.makeText(
-                this@DetailActivity,
-                "Item removed to Wishlist",
-                Toast.LENGTH_SHORT
-            ).show()
-        }*/
+        setupFavoriteToggle(checkBoxFavorite)
 
         registerReceiver(
             broadcastReceiver,
@@ -107,6 +83,32 @@ class DetailActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(broadcastReceiver)
+    }
+
+    private fun setupFavoriteToggle(checkBoxFavorite: CheckBox) {
+        checkBoxFavorite.setOnCheckedChangeListener { _, isChecked ->
+            when (isChecked) {
+                true -> {
+                    lifecycleScope.launch {
+                        favorite.liked = true
+                        favoriteViewModel.insertFavorite(favorite)
+/*                        Toast.makeText(
+                            this@DetailActivity,
+                            "Item added to Wishlist",
+                            Toast.LENGTH_SHORT
+                        ).show()*/
+                    }
+                }
+                false -> {
+                    favoriteViewModel.deleteByUrl(previewUrl)
+/*                    Toast.makeText(
+                        this@DetailActivity,
+                        "Item removed to Wishlist",
+                        Toast.LENGTH_SHORT
+                    ).show()*/
+                }
+            }
+        }
     }
 
     private val broadcastReceiver = object : BroadcastReceiver() {
