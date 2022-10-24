@@ -6,7 +6,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.shevy.gifapp.data.GifsInteractorImpl
 import com.shevy.gifapp.domain.interactors.Gif
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -41,6 +46,16 @@ class MainViewModelTest2 {
         })
     }*/
 
+    @BeforeEach
+    fun setup() {
+        Dispatchers.setMain(Dispatchers.Unconfined)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
     @Test
     fun getSearchText() = runBlocking {
         // setup
@@ -60,7 +75,6 @@ class MainViewModelTest2 {
 
         // action
         viewModel.onSearchTextChanged(text = text)
-        viewModel.searchText.observeForever {  }
 
         // check
         val actual = viewModel.searchText.value.toString()
