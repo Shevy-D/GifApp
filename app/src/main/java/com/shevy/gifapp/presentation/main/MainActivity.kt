@@ -16,6 +16,8 @@ import com.shevy.gifapp.domain.interactors.GifInteractor
 import com.shevy.gifapp.presentation.detail.DetailActivity
 import com.shevy.gifapp.presentation.favorite.FavoriteActivity
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -62,11 +64,12 @@ class MainActivity : AppCompatActivity() {
             binding.progressBar.isVisible = loading
         })*/
 
-        lifecycleScope.launch {
+/*        lifecycleScope.launch {
             mainViewModel.searchText.collect {
                 searchEditText = it
             }
         }
+
         lifecycleScope.launch {
             mainViewModel.gifs.collect {
                 adapter.setGifs(it)
@@ -77,6 +80,19 @@ class MainActivity : AppCompatActivity() {
             mainViewModel.loading.collect { loading ->
                 binding.progressBar.isVisible = loading
             }
+        }
+*/
+
+        lifecycleScope.launchWhenStarted {
+            mainViewModel.searchText.collect { searchEditText = it }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            mainViewModel.gifs.collect { adapter.setGifs(it) }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            mainViewModel.loading.collect { loading -> binding.progressBar.isVisible = loading }
         }
 
         recyclerView.layoutManager =

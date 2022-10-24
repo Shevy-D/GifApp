@@ -42,6 +42,10 @@ class MainViewModel(private val interactor: GifInteractor) : ViewModel() {
         viewModelScope.launch {
             val gifs = interactor.getSearchingGifs(text).await()
             _gifs.value = gifs
+
+            //for imitation of working
+            delay(1000)
+
             _loading.value = false
         }
     }
