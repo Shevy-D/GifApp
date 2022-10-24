@@ -14,7 +14,7 @@ class GifsInteractorImpl(private val api: GifsApi): GifInteractor {
     override fun getTrendingGifs(): Deferred<List<Gif>> = scope.async {
         val response = api.getTrendingGifs(apiKey, limit, rating)
         val gifs = response.data.map {
-            Gif(it.images.downsized.url, it.images.original.url)
+            Gif(it.images.fixed_width_downsampled.url, it.images.original.url)
         }
         return@async gifs
     }
@@ -22,7 +22,7 @@ class GifsInteractorImpl(private val api: GifsApi): GifInteractor {
     override fun getSearchingGifs(q: String): Deferred<List<Gif>> = scope.async {
         val response = api.getSearchingGifs(apiKey, q, limit, offset, rating, lang)
         val gifs = response.data.map {
-            Gif(it.images.downsized.url, it.images.original.url)
+            Gif(it.images.fixed_width_downsampled.url, it.images.original.url)
         }
         return@async gifs
     }
