@@ -4,6 +4,7 @@ import com.shevy.gifapp.data.GifsInteractorImpl
 import com.shevy.gifapp.domain.interactors.Gif
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -11,66 +12,61 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.mock
 
 class MainViewModelTest {
-/*
-    @AfterEach
-    fun afterEach() {
-        Mockito.reset(interactorTest)
-        //ArchTaskExecutor.getInstance().setDelegate(null)
-    }
 
-    @BeforeEach
-    fun beforeEach() {
-      ArchTaskExecutor.getInstance().setDelegate(object : TaskExecutor() {
-            override fun executeOnDiskIO(runnable: Runnable) {
-                runnable.run()
-            }
+    val interactorTest = mock<GifsInteractorImpl>()
 
-            override fun postToMainThread(runnable: Runnable) {
-                runnable.run()
-            }
-
-            override fun isMainThread(): Boolean {
-                return true
-            }
-        })
-    }*/
-
+    @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach
     fun setup() {
+        Mockito.reset(interactorTest)
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @AfterEach
     fun tearDown() {
         Dispatchers.resetMain()
     }
 
     @Test
-    fun getSearchText() = runBlocking {
+    fun `enters the search text and puts it in the StateFlow`() = runBlocking {
         // setup
-        val interactorTest = mock<GifsInteractorImpl>()
-
-        val testData = listOf(
-            Gif("test preview url", "test url"),
-            Gif("test preview url2", "test url2")
-        )
         val text = "Test"
-        val result = mock<Deferred<List<Gif>>>()
-        `when`(result.await()).thenReturn(testData)
-        `when`(interactorTest.getSearchingGifs(text)).thenReturn(result)
+        val gifs = mock<Deferred<List<Gif>>>()
+        `when`(interactorTest.getSearchingGifs(text)).thenReturn(gifs)
         val viewModel = MainViewModel(interactorTest)
-
-        //Mockito.verify(interactorTest, Mockito.times(1)).getSearchingGifs(text)
 
         // action
         viewModel.onSearchTextChanged(text = text)
 
         // check
-        val actual = viewModel.searchText.value.toString()
+        val actual = viewModel.searchText.value
         Assertions.assertEquals(text, actual)
+    }
+
+    @Test
+    fun `enters the search text and get list of GIFS`() = runBlocking {
+        // setup
+        val testData = listOf(
+            Gif("test preview url", "test url"),
+            Gif("test preview url2", "test url2")
+        )
+        val text = "Test"
+        val gifs = mock<Deferred<List<Gif>>>()
+        `when`(gifs.await()).thenReturn(testData)
+        `when`(interactorTest.getSearchingGifs(text)).thenReturn(gifs)
+        val viewModel = MainViewModel(interactorTest)
+
+        // action
+        viewModel.onSearchTextChanged(text = text)
+
+        // check
+        val actual = viewModel.gifs.value
+        Assertions.assertEquals(testData, actual)
     }
 }
