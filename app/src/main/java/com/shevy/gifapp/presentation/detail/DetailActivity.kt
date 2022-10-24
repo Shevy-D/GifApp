@@ -50,7 +50,7 @@ class DetailActivity : AppCompatActivity() {
 
         val detailImageView = binding.detailImageView
         val downloadButton = binding.downloadButton
-        val checkBoxFavorite = binding.cbFavorite
+        //val checkBoxFavorite = binding.cbFavorite
 
         favoriteViewModel.initDatabase()
         url = intent.getStringExtra("url").toString()
@@ -65,6 +65,26 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
+/*        lifecycleScope.launch {
+            favorite = async {
+                return@async favoriteViewModel.getFavoriteByUrl(previewUrl)
+            }.await() ?: Favorite(downsized = previewUrl, original = url)
+            checkBoxFavorite.isChecked = favorite.liked
+        }*/
+
+        //setupFavoriteToggle(checkBoxFavorite)
+
+        registerReceiver(
+            broadcastReceiver,
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val checkBoxFavorite = binding.cbFavorite
+
         lifecycleScope.launch {
             favorite = async {
                 return@async favoriteViewModel.getFavoriteByUrl(previewUrl)
@@ -73,11 +93,6 @@ class DetailActivity : AppCompatActivity() {
         }
 
         setupFavoriteToggle(checkBoxFavorite)
-
-        registerReceiver(
-            broadcastReceiver,
-            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-        )
     }
 
     override fun onDestroy() {
