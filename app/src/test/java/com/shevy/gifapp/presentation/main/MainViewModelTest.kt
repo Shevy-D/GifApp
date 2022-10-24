@@ -69,4 +69,23 @@ class MainViewModelTest {
         val actual = viewModel.gifs.value
         Assertions.assertEquals(testData, actual)
     }
+
+    @Test
+    fun `enters the search text and get loading = true`() = runBlocking {
+        // setup
+        val text = "Test"
+        val gifs = mock<Deferred<List<Gif>>>()
+        `when`(interactorTest.getSearchingGifs(text)).thenReturn(gifs)
+        val viewModel = MainViewModel(interactorTest)
+
+        // action
+        viewModel.onSearchTextChanged(text = text)
+
+        // check
+        val actual = viewModel.loading.value
+
+        Mockito.verify(interactorTest, Mockito.times(1))
+            .getSearchingGifs(text)
+        Assertions.assertEquals(true, actual)
+    }
 }
