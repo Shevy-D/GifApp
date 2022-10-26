@@ -10,6 +10,8 @@ import com.shevy.gifapp.data.repository.FavoriteRepositoryImpl
 import com.shevy.gifapp.data.room.database.FavoriteDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(application: Application) :
@@ -23,7 +25,7 @@ class FavoriteViewModel(application: Application) :
         repository = FavoriteRepositoryImpl(daoNote)
     }
 
-    fun getAllFavorites(): LiveData<List<Favorite>> {
+    fun getAllFavorites(): Flow<List<Favorite>> {
         return repository.allFavorites
     }
 

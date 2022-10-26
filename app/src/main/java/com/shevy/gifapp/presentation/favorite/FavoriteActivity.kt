@@ -3,12 +3,14 @@ package com.shevy.gifapp.presentation.favorite
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.models.database.Favorite
 import com.shevy.gifapp.databinding.ActivityFavoriteBinding
 import com.shevy.gifapp.presentation.detail.DetailActivity
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -40,8 +42,14 @@ class FavoriteActivity : AppCompatActivity() {
 
         favoriteViewModel.initDatabase()
 
-        lifecycleScope.launch {
+/*        lifecycleScope.launch {
             favoriteViewModel.getAllFavorites().observe(this@FavoriteActivity) { listFavorites ->
+                adapter.setFavorite(listFavorites.asReversed())
+            }
+        }*/
+
+        lifecycleScope.launchWhenStarted {
+            favoriteViewModel.getAllFavorites().collect { listFavorites ->
                 adapter.setFavorite(listFavorites.asReversed())
             }
         }
