@@ -22,14 +22,14 @@ class MainViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach
-    fun setup() {
+    fun beforeEach() {
         Mockito.reset(interactorTest)
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @AfterEach
-    fun tearDown() {
+    fun afterEach() {
         Dispatchers.resetMain()
     }
 

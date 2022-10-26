@@ -3,7 +3,6 @@ package com.shevy.gifapp.presentation.favorite
 import android.app.Application
 import android.content.Context
 import com.shevy.gifapp.data.models.database.Favorite
-import com.shevy.gifapp.data.repository.FavoriteRepository
 import com.shevy.gifapp.data.repository.FavoriteRepositoryImpl
 import com.shevy.gifapp.data.room.database.FavoriteDatabase
 import kotlinx.coroutines.Dispatchers
@@ -12,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
@@ -24,13 +23,13 @@ class FavoriteViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach
-    fun setup() {
+    fun beforeEach() {
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @AfterEach
-    fun tearDown() {
+    fun afterEach() {
         Dispatchers.resetMain()
     }
 
