@@ -12,7 +12,7 @@ class GifsInteractorImpl(private val api: GifsApi): GifInteractor {
     private val scope = CoroutineScope(Dispatchers.IO)
 
     override fun getTrendingGifs(): Deferred<List<Gif>> = scope.async {
-        val response = api.getTrendingGifs(apiKey, limit, rating)
+        val response = api.getTrendingGifsByApi(apiKey, limit, rating)
         val gifs = response.data.map {
             Gif(it.images.fixed_width_downsampled.url, it.images.original.url)
         }

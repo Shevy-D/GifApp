@@ -2,8 +2,12 @@ package com.shevy.gifapp.presentation.favorite
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import com.shevy.gifapp.data.models.database.Favorite
+import com.shevy.gifapp.data.repository.FavoriteRepository
 import com.shevy.gifapp.data.repository.FavoriteRepositoryImpl
+import com.shevy.gifapp.data.room.data.FavoriteDao
 import com.shevy.gifapp.data.room.database.FavoriteDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,15 +25,26 @@ import org.mockito.kotlin.mock
 
 class FavoriteViewModelTest {
 
+    private lateinit var database: FavoriteDatabase
+    private lateinit var favoriteDao: FavoriteDao
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach
     fun beforeEach() {
+        database = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            FavoriteDatabase::class.java
+        ).allowMainThreadQueries().build()
+
+        favoriteDao = database.getFavoriteDao()
+
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @AfterEach
     fun afterEach() {
+        database.close()
         Dispatchers.resetMain()
     }
 
@@ -39,10 +54,6 @@ class FavoriteViewModelTest {
         val application = mock<Application>()
         val favoriteViewModelTest = FavoriteViewModel(application)
 
-        //val favoriteMock = mock<Flow<List<Favorite>>>()
-
-        val favoriteViewModelMock = mock<FavoriteViewModel>()
-
         val favorites: Flow<List<Favorite>> =
             flowOf(
                 (listOf(
@@ -51,18 +62,16 @@ class FavoriteViewModelTest {
                 ))
             )
 
-        val contextTest = mock<Context>()
-        //val daoNoteTest = FavoriteDatabase.getInstance(contextTest).getFavoriteDao()
-        //val repository: FavoriteRepository = FavoriteRepositoryImpl(daoNoteTest)
+        val daoNote = FavoriteDatabase.getInstance(application).getFavoriteDao()
+        val repository= /*FavoriteRepositoryImpl(daoNote)*/ mock<FavoriteRepositoryImpl>()
 
         val favoriteRepository = mock<FavoriteRepositoryImpl>()
 
-        `when`(favoriteRepository.allFavorites).thenReturn(favorites)
+        //`when`(FavoriteRepositoryImpl(daoNote)).thenReturn(repository)
 
-        `when`(favoriteViewModelMock.initDatabase()).doAnswer {
-            val daoNote = FavoriteDatabase.getInstance(contextTest).getFavoriteDao()
-            val repository = FavoriteRepositoryImpl(daoNote)
-        }
+        //`when`(favoriteViewModelTest.initDatabase()).thenReturn(repository)
+
+        `when`(favoriteRepository.allFavorites).thenReturn(favorites)
 
         //action
         favoriteViewModelTest.initDatabase()
