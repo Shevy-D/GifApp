@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 
 class MainViewModelTest {
@@ -47,6 +48,8 @@ class MainViewModelTest {
         // check
         val actual = viewModel.searchText.value
         Assertions.assertEquals(text, actual)
+
+        //Mockito.verify(interactorTest, Mockito.times(1)).getSearchingGifs(any())
     }
 
     @Test
@@ -68,6 +71,8 @@ class MainViewModelTest {
         // check
         val actual = viewModel.gifs.value
         Assertions.assertEquals(testData, actual)
+
+        //Mockito.verify(interactorTest, Mockito.times(1)).getSearchingGifs(any())
     }
 
     @Test

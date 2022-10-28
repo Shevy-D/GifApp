@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.StateFlow
 @Dao
 interface FavoriteDao {
 
-    //MutableStateFlow<List<Gif>> = MutableStateFlow(listOf())
     @Query("SELECT * FROM favorite_database")
     fun getAllFavorites(): Flow<List<Favorite>>
 

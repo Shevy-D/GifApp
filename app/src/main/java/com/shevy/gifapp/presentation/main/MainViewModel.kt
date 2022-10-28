@@ -13,9 +13,6 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val interactor: GifInteractor) : ViewModel() {
 
-/*    private val _searchText = MutableLiveData<String>()
-    private val _loading = MutableLiveData<Boolean>()
-    private val _gifs = MutableLiveData<List<Gif>>()*/
     private val _searchText: MutableStateFlow<String> = MutableStateFlow("")
     private val _loading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val _gifs: MutableStateFlow<List<Gif>> = MutableStateFlow(listOf())
@@ -26,16 +23,6 @@ class MainViewModel(private val interactor: GifInteractor) : ViewModel() {
 
     fun onSearchTextChanged(text: String) {
         if (_searchText.value == text) return
-
-        /*_searchText.postValue(text)
-        _loading.postValue(true)
-        viewModelScope.launch {
-            val gifs = interactor.getSearchingGifs(text).await()
-            _gifs.postValue(gifs)
-
-            //delay(1000)
-
-            _loading.postValue(false)*/
 
         _searchText.value = text
         _loading.value = true
