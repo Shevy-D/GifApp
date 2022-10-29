@@ -2,6 +2,7 @@ package com.shevy.gifapp.data
 
 import com.shevy.gifapp.data.models.gif.*
 import com.shevy.gifapp.domain.interactors.Gif
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -36,7 +37,18 @@ internal class GifsInteractorImplTest {
 
         //check
         Assertions.assertEquals(expected, actual)
-        //Mockito.verify(api, Mockito.times(1)).getTrendingGifsByApi(any(), any(), any())
+    }
+
+    @Test
+    fun `check that the getSearchingGifs() method is called one`() {
+        //setup
+        val interactor = mock<GifsInteractorImpl>()
+
+        //action
+        interactor.getTrendingGifs()
+
+        //check
+        Mockito.verify(interactor, Mockito.times(1)).getTrendingGifs()
     }
 
     @Test

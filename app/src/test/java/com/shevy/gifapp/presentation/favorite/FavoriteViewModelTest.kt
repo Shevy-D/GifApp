@@ -45,7 +45,7 @@ class FavoriteViewModelTest {
 
         lateinit var actual: List<Favorite>
 
-        val favoriteViewModelTest = mock<FavoriteViewModel>()
+        //val favoriteViewModelTest = mock<FavoriteViewModel>()
 
         val favorites: List<Favorite> =
             (listOf(
@@ -61,15 +61,14 @@ class FavoriteViewModelTest {
         //`when`(favoriteDao).thenReturn()
         `when`(favoriteDatabase.getFavoriteDao()).thenReturn(favoriteDao)
 
-
-        //`when`(favoriteDao.getAllFavorites()).thenReturn(favorites)
-
-/*        `when`(favoriteRepository.allFavorites).thenReturn(flowOf(favorites))
-        `when`(favoriteViewModelTest.getAllFavorites()).thenReturn(flowOf(favorites))*/
+/*
+        `when`(favoriteDao.getAllFavorites()).thenReturn(favorites)
+        `when`(favoriteRepository.allFavorites).thenReturn(flowOf(favorites))
+        `when`(favoriteViewModelTest.getAllFavorites()).thenReturn(flowOf(favorites))
+        */
 
         //action
         favoriteViewModel.initDatabase()
-
         favoriteViewModel.getAllFavorites().collect {
             actual = it
         }

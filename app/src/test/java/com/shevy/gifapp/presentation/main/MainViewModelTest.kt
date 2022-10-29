@@ -48,8 +48,36 @@ class MainViewModelTest {
         // check
         val actual = viewModel.searchText.value
         Assertions.assertEquals(text, actual)
+    }
 
-        //Mockito.verify(interactorTest, Mockito.times(1)).getSearchingGifs(any())
+    @Test
+    fun `check that the getSearchingGifs() method is called once`() {
+        // setup
+        val text = "Test"
+        val gifs = mock<Deferred<List<Gif>>>()
+        `when`(interactorTest.getSearchingGifs(text)).thenReturn(gifs)
+        val viewModel = MainViewModel(interactorTest)
+
+        // action
+        viewModel.onSearchTextChanged(text = text)
+
+        // check
+        Mockito.verify(interactorTest, Mockito.times(1)).getSearchingGifs(any())
+    }
+
+    @Test
+    fun `check that the getTrendingGifs() method is never called`() {
+        // setup
+        val text = "Test"
+        val gifs = mock<Deferred<List<Gif>>>()
+        `when`(interactorTest.getSearchingGifs(text)).thenReturn(gifs)
+        val viewModel = MainViewModel(interactorTest)
+
+        // action
+        viewModel.onSearchTextChanged(text = text)
+
+        // check
+        Mockito.verify(interactorTest, Mockito.never()).getTrendingGifs()
     }
 
     @Test
@@ -71,8 +99,6 @@ class MainViewModelTest {
         // check
         val actual = viewModel.gifs.value
         Assertions.assertEquals(testData, actual)
-
-        //Mockito.verify(interactorTest, Mockito.times(1)).getSearchingGifs(any())
     }
 
     @Test

@@ -55,7 +55,8 @@ class DetailActivity : AppCompatActivity() {
         favoriteViewModel.initDatabase()
         url = intent.getStringExtra("url").toString()
         previewUrl = intent.getStringExtra("previewUrl").toString()
-        Glide.with(this@DetailActivity).load(url).into(detailImageView)
+        //Glide.with(this@DetailActivity).load(url).into(detailImageView)
+        Glide.with(this@DetailActivity).load(previewUrl).into(detailImageView)
 
         downloadButton.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {

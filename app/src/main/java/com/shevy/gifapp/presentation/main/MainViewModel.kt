@@ -19,7 +19,7 @@ class MainViewModel(private val interactor: GifInteractor) : ViewModel() {
 
     val searchText: StateFlow<String> = _searchText
     val loading: StateFlow<Boolean> = _loading
-    val gifs: MutableStateFlow<List<Gif>> = _gifs
+    val gifs: StateFlow<List<Gif>> = _gifs
 
     fun onSearchTextChanged(text: String) {
         if (_searchText.value == text) return
