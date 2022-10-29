@@ -33,11 +33,6 @@ class GifsInteractorImpl(private val api: GifsApi): GifInteractor {
         private const val offset = "0"
         private const val rating = "g"
         private const val lang = "en"
-
-
-/*        fun create(): GifsInteractorImpl {
-            return GifsInteractorImpl(GifsApi.create())
-        }*/
     }
 }
 

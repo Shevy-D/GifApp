@@ -2,7 +2,6 @@ package com.shevy.gifapp.data
 
 import com.shevy.gifapp.data.models.gif.*
 import com.shevy.gifapp.domain.interactors.Gif
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
