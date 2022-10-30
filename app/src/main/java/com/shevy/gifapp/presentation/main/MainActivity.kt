@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -76,7 +77,7 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+            GridLayoutManager(this@MainActivity, 2, GridLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
     }
 

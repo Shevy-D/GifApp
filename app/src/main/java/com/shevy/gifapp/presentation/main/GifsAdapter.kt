@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.shevy.gifapp.R
 import com.shevy.gifapp.databinding.RecyclerviewItemBinding
 import com.shevy.gifapp.domain.interactors.Gif
@@ -40,6 +43,8 @@ class GifsAdapter(
         val itemsGifs = gifs[position]
         Glide.with(holder.imageView.context)
             .load(itemsGifs.previewUrl)
+            //.transform(CenterInside(),RoundedCorners(50))
+            //.apply(RequestOptions.bitmapTransform(RoundedCorners(14)))
             .into(holder.imageView)
     }
 

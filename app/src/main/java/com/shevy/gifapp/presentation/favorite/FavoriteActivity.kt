@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.data.models.database.Favorite
@@ -37,7 +38,7 @@ class FavoriteActivity : AppCompatActivity() {
         val recyclerView = binding.favoritesRecyclerView
 
         recyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+            GridLayoutManager(this@FavoriteActivity, 2, GridLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
 
         favoriteViewModel.initDatabase()

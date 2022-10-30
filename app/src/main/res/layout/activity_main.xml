@@ -14,12 +14,13 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/custom_background_for_search_view"
-        android:iconifiedByDefault="true"
+        android:iconifiedByDefault="false"
         android:queryHint="Enter a word"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:focusable="false"/>
 
 <!--    <ProgressBar
         android:id="@+id/progress_bar"
