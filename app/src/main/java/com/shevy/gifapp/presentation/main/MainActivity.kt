@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                     val gifs = getApiResponse(newText)
                     adapter.setGifs(gifs)
                 }
+                //searchView.clearFocus()
                 return false
             }
         })

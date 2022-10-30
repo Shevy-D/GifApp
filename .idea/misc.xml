@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/custom_background_for_search_view.xml" value="0.136" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_default_gif.xml" value="0.1" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_heart_filled.xml" value="0.1" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_heart_outlined.xml" value="0.1" />
