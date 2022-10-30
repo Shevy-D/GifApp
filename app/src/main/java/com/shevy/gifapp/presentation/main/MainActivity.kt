@@ -2,31 +2,27 @@ package com.shevy.gifapp.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.widget.Button
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.databinding.ActivityMainBinding
 import com.shevy.gifapp.domain.interactors.Gif
 import com.shevy.gifapp.domain.interactors.GifInteractor
 import com.shevy.gifapp.presentation.detail.DetailActivity
 import com.shevy.gifapp.presentation.favorite.FavoriteActivity
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    lateinit var searchEditText: String
+    lateinit var favoritesButton: Button
     lateinit var searchView: SearchView
+    lateinit var recyclerView: RecyclerView
 
     // Запрашиваем зависимость через Koin (это позволяет нам сделать функция by inject()
     private val interactor: GifInteractor by inject()
@@ -49,38 +45,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         searchView = binding.searchView
-        val recyclerView = binding.recyclerView
-        val favoritesButton = binding.favoritesButton
+        favoritesButton = binding.favoritesButton
 
-/*        lifecycleScope.launchWhenStarted {
-            mainViewModel.searchText.collect { searchEditText = it }
-        }*/
-
-        lifecycleScope.launchWhenStarted {
-            mainViewModel.gifs.collect { adapter.setGifs(it) }
-        }
-
-        lifecycleScope.launchWhenStarted {
-            mainViewModel.loading.collect { loading -> binding.progressBar.isVisible = loading }
-        }
-
-        recyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        recyclerView.adapter = adapter
-
-        searchByLetters()
+        initRecyclerView()
+        searchBySearchView()
+        favoritesButtonClick()
 
         lifecycleScope.launch {
             val gifs = getApiResponse()
             adapter.setGifs(gifs)
         }
+    }
 
+    private fun initRecyclerView() {
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        recyclerView.adapter = adapter
+    }
+
+    private fun favoritesButtonClick() {
         favoritesButton.setOnClickListener {
             startActivity(Intent(this@MainActivity, FavoriteActivity::class.java))
         }
     }
 
-    private fun searchByLetters() {
+    private fun searchBySearchView() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 if (query.isEmpty()) {
@@ -91,6 +81,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 return false
             }
+
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
                     lifecycleScope.launch {
