@@ -2,13 +2,15 @@ package com.shevy.gifapp.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.SearchView
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.shevy.gifapp.R
 import com.shevy.gifapp.databinding.ActivityMainBinding
 import com.shevy.gifapp.domain.interactors.Gif
 import com.shevy.gifapp.domain.interactors.GifInteractor
@@ -20,7 +22,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    lateinit var favoritesButton: Button
+    //lateinit var favoritesButton: Button
     lateinit var searchView: SearchView
     lateinit var recyclerView: RecyclerView
 
@@ -44,16 +46,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         searchView = binding.searchView
-        favoritesButton = binding.favoritesButton
+        //favoritesButton = binding.favoritesButton
 
         initRecyclerView()
         searchBySearchView()
-        favoritesButtonClick()
 
         lifecycleScope.launch {
             val gifs = getApiResponse(null)
             adapter.setGifs(gifs)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.favorites_menu -> this.startActivity(
+                Intent(
+                    this@MainActivity,
+                    FavoriteActivity::class.java
+                )
+            )
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initRecyclerView() {
@@ -63,11 +81,11 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    private fun favoritesButtonClick() {
+/*    private fun favoritesButtonClick() {
         favoritesButton.setOnClickListener {
             startActivity(Intent(this@MainActivity, FavoriteActivity::class.java))
         }
-    }
+    }*/
 
     private fun searchBySearchView() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -80,10 +98,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                    lifecycleScope.launch {
-                        val gifs = getApiResponse(newText)
-                        adapter.setGifs(gifs)
-                    }
+                lifecycleScope.launch {
+                    val gifs = getApiResponse(newText)
+                    adapter.setGifs(gifs)
+                }
                 return false
             }
         })
