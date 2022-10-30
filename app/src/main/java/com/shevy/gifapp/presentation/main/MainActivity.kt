@@ -26,9 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     // Запрашиваем зависимость через Koin (это позволяет нам сделать функция by inject()
     private val interactor: GifInteractor by inject()
-    //private val interactor = GifsInteractorImpl.create()
 
-    private val mainViewModel by viewModel<MainViewModel>()
+    //private val mainViewModel by viewModel<MainViewModel>()
 
     private val adapter = GifsAdapter(::onClick)
 
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         favoritesButtonClick()
 
         lifecycleScope.launch {
-            val gifs = getApiResponse()
+            val gifs = getApiResponse(null)
             adapter.setGifs(gifs)
         }
     }
@@ -73,37 +72,28 @@ class MainActivity : AppCompatActivity() {
     private fun searchBySearchView() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                if (query.isEmpty()) {
-                    lifecycleScope.launch {
-                        val gifs = getApiResponse()
-                        adapter.setGifs(gifs)
-                    }
+                lifecycleScope.launch {
+                    val gifs = getApiResponse(query)
+                    adapter.setGifs(gifs)
                 }
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.isEmpty()) {
                     lifecycleScope.launch {
-                        val gifs = getApiResponse()
+                        val gifs = getApiResponse(newText)
                         adapter.setGifs(gifs)
                     }
-                } else {
-                    lifecycleScope.launch {
-                        val gifs = interactor.getSearchingGifs(newText).await()
-                        adapter.setGifs(gifs)
-                    }
-                }
                 return false
             }
         })
     }
 
-    private suspend fun getApiResponse(): List<Gif> {
-        return if (mainViewModel.searchText.value.isNullOrEmpty()) {
+    private suspend fun getApiResponse(text: String?): List<Gif> {
+        return if (text.isNullOrEmpty()) {
             interactor.getTrendingGifs().await()
         } else {
-            interactor.getSearchingGifs(mainViewModel.searchText.value.toString()).await()
+            interactor.getSearchingGifs(text).await()
         }
     }
 }
