@@ -3,6 +3,7 @@ package com.shevy.gifapp.presentation.main
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -25,6 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var searchEditText: String
+    lateinit var searchView: SearchView
 
     // Запрашиваем зависимость через Koin (это позволяет нам сделать функция by inject()
     private val interactor: GifInteractor by inject()
@@ -46,46 +48,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val searchButton = binding.searchButton
+        searchView = binding.searchView
         val recyclerView = binding.recyclerView
         val favoritesButton = binding.favoritesButton
 
-        searchEditText = binding.searchEditText.text?.trim().toString()
-
-/*        mainViewModel.searchText.observe(this, Observer {
-            searchEditText = it
-        })
-
-        mainViewModel.gifs.observe(this, Observer {
-            adapter.setGifs(it)
-        })
-
-        mainViewModel.loading.observe(this, Observer { loading ->
-            binding.progressBar.isVisible = loading
-        })*/
-
-/*        lifecycleScope.launch {
-            mainViewModel.searchText.collect {
-                searchEditText = it
-            }
-        }
-
-        lifecycleScope.launch {
-            mainViewModel.gifs.collect {
-                adapter.setGifs(it)
-            }
-        }
-
-        lifecycleScope.launch {
-            mainViewModel.loading.collect { loading ->
-                binding.progressBar.isVisible = loading
-            }
-        }
-*/
-
-        lifecycleScope.launchWhenStarted {
+/*        lifecycleScope.launchWhenStarted {
             mainViewModel.searchText.collect { searchEditText = it }
-        }
+        }*/
 
         lifecycleScope.launchWhenStarted {
             mainViewModel.gifs.collect { adapter.setGifs(it) }
@@ -99,28 +68,7 @@ class MainActivity : AppCompatActivity() {
             StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
 
-        searchButton.setOnClickListener {
-
-            mainViewModel.onSearchTextChanged(binding.searchEditText.text.toString())
-
-            if (searchEditText.isEmpty()) {
-                Toast.makeText(this, "Enter text", Toast.LENGTH_SHORT).show()
-                lifecycleScope.launch {
-                    val gifs = getApiResponse()
-                    adapter.setGifs(gifs)
-                }
-            } else {
-                lifecycleScope.launch {
-                    val gifs = interactor.getSearchingGifs(searchEditText).await()
-                    adapter.setGifs(gifs)
-                }
-            }
-
-/*            val imm: InputMethodManager =
-                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-*/
-        }
+        searchByLetters()
 
         lifecycleScope.launch {
             val gifs = getApiResponse()
@@ -130,6 +78,34 @@ class MainActivity : AppCompatActivity() {
         favoritesButton.setOnClickListener {
             startActivity(Intent(this@MainActivity, FavoriteActivity::class.java))
         }
+    }
+
+    private fun searchByLetters() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                if (query.isEmpty()) {
+                    lifecycleScope.launch {
+                        val gifs = getApiResponse()
+                        adapter.setGifs(gifs)
+                    }
+                }
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (newText.isEmpty()) {
+                    lifecycleScope.launch {
+                        val gifs = getApiResponse()
+                        adapter.setGifs(gifs)
+                    }
+                } else {
+                    lifecycleScope.launch {
+                        val gifs = interactor.getSearchingGifs(newText).await()
+                        adapter.setGifs(gifs)
+                    }
+                }
+                return false
+            }
+        })
     }
 
     private suspend fun getApiResponse(): List<Gif> {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".presentation.main.MainActivity">
 
-    <androidx.appcompat.widget.AppCompatEditText
+<!--    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/searchEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -19,6 +19,18 @@
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintEnd_toStartOf="@+id/searchButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search here"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,15 +45,15 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
+<!--    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/searchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/search_text"
-        app:layout_constraintBottom_toBottomOf="@+id/searchEditText"
+        app:layout_constraintBottom_toBottomOf="@+id/searchView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/searchEditText"
-        app:layout_constraintTop_toTopOf="@+id/searchEditText" />
+        app:layout_constraintStart_toEndOf="@+id/searchView"
+        app:layout_constraintTop_toTopOf="@+id/searchView" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -52,7 +64,7 @@
         app:layout_constraintBottom_toTopOf="@+id/favoritesButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
         tools:listitem="@layout/recyclerview_item">
 
     </androidx.recyclerview.widget.RecyclerView>
