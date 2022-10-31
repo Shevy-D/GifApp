@@ -8,9 +8,7 @@ import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.shevy.gifapp.R
 import com.shevy.gifapp.databinding.ActivityMainBinding
 import com.shevy.gifapp.domain.interactors.Gif
@@ -46,7 +44,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         searchView = binding.searchView
-        //favoritesButton = binding.favoritesButton
 
         initRecyclerView()
         searchBySearchView()
@@ -58,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -80,12 +77,6 @@ class MainActivity : AppCompatActivity() {
             GridLayoutManager(this@MainActivity, 2, GridLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
     }
-
-/*    private fun favoritesButtonClick() {
-        favoritesButton.setOnClickListener {
-            startActivity(Intent(this@MainActivity, FavoriteActivity::class.java))
-        }
-    }*/
 
     private fun searchBySearchView() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

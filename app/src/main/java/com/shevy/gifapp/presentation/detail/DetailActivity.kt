@@ -6,7 +6,6 @@ import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -14,6 +13,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -26,8 +27,10 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.shevy.gifapp.R
 import com.shevy.gifapp.data.models.database.Favorite
 import com.shevy.gifapp.databinding.ActivityDetailBinding
+import com.shevy.gifapp.presentation.favorite.FavoriteActivity
 import com.shevy.gifapp.presentation.favorite.FavoriteViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -87,6 +90,37 @@ class DetailActivity : AppCompatActivity() {
         }
 
         setupFavoriteToggle(checkBoxFavorite)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+/*            R.id.detail_menu -> this.startActivity(
+                Intent(
+                    this@DetailActivity,
+                    FavoriteActivity::class.java
+                )
+            )*/
+
+            R.id.download_menu -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                askPermissions()
+            } else {
+                callGlideToSaveGif()
+            }
+
+            R.id.share_menu
+            -> this.startActivity(
+                Intent(
+                    this@DetailActivity,
+                    FavoriteActivity::class.java
+                )
+            )
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun callGlideToSaveGif() {
