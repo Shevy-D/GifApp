@@ -99,13 +99,6 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-/*            R.id.detail_menu -> this.startActivity(
-                Intent(
-                    this@DetailActivity,
-                    FavoriteActivity::class.java
-                )
-            )*/
-
             R.id.download_menu -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 askPermissions()
             } else {
@@ -113,14 +106,66 @@ class DetailActivity : AppCompatActivity() {
             }
 
             R.id.share_menu
-            -> this.startActivity(
-                Intent(
+            -> {
+                Toast.makeText(
                     this@DetailActivity,
-                    FavoriteActivity::class.java
-                )
-            )
+                    "You clicked on Share Button",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                shareGif()
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun shareGif() {
+        Glide.with(this@DetailActivity).asFile()
+            .load(url)
+            .apply(RequestOptions().format(DecodeFormat.PREFER_ARGB_8888))
+            .into(object : SimpleTarget<File?>() {
+                override fun onResourceReady(resource: File, transition: Transition<in File?>?) {
+                    shareUrlGifImage(resource)
+                }
+            })
+    }
+
+    private fun shareUrlGifImage(shareImage: File) {
+
+        val location = File(
+            "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)} ${
+                resources.getString(R.string.app_name)
+            }"
+        )
+
+        val shareFile = File(location.path + ".gif")
+
+        try {
+            val fileOutputStream = FileOutputStream(shareFile)
+            val fileInputStream = FileInputStream(shareImage)
+
+            val inputChannel = fileInputStream.channel
+            val outputChannel = fileOutputStream.channel
+
+            inputChannel.transferTo(0, inputChannel.size(), outputChannel)
+
+            fileOutputStream.close()
+            fileInputStream.close()
+
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "gif/*"
+            //val uri = Uri.fromFile(shareFile)
+            val uri = Uri.parse(shareFile.path)
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            startActivity(Intent.createChooser(shareIntent, "Share Gif"))
+
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun callGlideToSaveGif() {
