@@ -10,7 +10,7 @@ import com.shevy.gifapp.databinding.RecyclerviewItemBinding
 import com.shevy.gifapp.data.models.database.Favorite
 
 class FavoritesAdapter(
-private val onFavoriteSelected: ((favorites: Favorite) -> Unit)
+    private val onFavoriteSelected: ((favorites: Favorite) -> Unit)
 ) : RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHolder>() {
 
     //private val favorites = mutableListOf<Favorite>()
@@ -38,6 +38,7 @@ private val onFavoriteSelected: ((favorites: Favorite) -> Unit)
         val itemsGifs = favorites[position]
         Glide.with(holder.imageView.context)
             .load(itemsGifs.downsized)
+            .circleCrop()
             .into(holder.imageView)
     }
 

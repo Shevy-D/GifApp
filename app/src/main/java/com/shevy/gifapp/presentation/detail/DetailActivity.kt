@@ -22,13 +22,18 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.shevy.gifapp.data.models.database.Favorite
 import com.shevy.gifapp.databinding.ActivityDetailBinding
 import com.shevy.gifapp.presentation.favorite.FavoriteViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
+import java.io.*
+import java.util.*
 import kotlin.properties.Delegates
 
 class DetailActivity : AppCompatActivity() {
@@ -50,35 +55,23 @@ class DetailActivity : AppCompatActivity() {
 
         val detailImageView = binding.detailImageView
         val downloadButton = binding.downloadButton
-        //val checkBoxFavorite = binding.cbFavorite
 
         favoriteViewModel.initDatabase()
         url = intent.getStringExtra("url").toString()
         previewUrl = intent.getStringExtra("previewUrl").toString()
-        //Glide.with(this@DetailActivity).load(url).into(detailImageView)
         Glide.with(this@DetailActivity).load(previewUrl).into(detailImageView)
 
         downloadButton.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 askPermissions()
             } else {
-                downloadImage(url)
+                callGlideToSaveGif()
             }
         }
-
-/*        lifecycleScope.launch {
-            favorite = async {
-                return@async favoriteViewModel.getFavoriteByUrl(previewUrl)
-            }.await() ?: Favorite(downsized = previewUrl, original = url)
-            checkBoxFavorite.isChecked = favorite.liked
-        }*/
-
-        //setupFavoriteToggle(checkBoxFavorite)
-
-        registerReceiver(
+/*        registerReceiver(
             broadcastReceiver,
             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-        )
+        )*/
     }
 
     override fun onResume() {
@@ -96,9 +89,57 @@ class DetailActivity : AppCompatActivity() {
         setupFavoriteToggle(checkBoxFavorite)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(broadcastReceiver)
+    private fun callGlideToSaveGif() {
+        Glide.with(this@DetailActivity).asFile()
+            .load(url)
+            .apply(RequestOptions().format(DecodeFormat.PREFER_ARGB_8888))
+            .into(object : SimpleTarget<File?>() {
+                override fun onResourceReady(resource: File, transition: Transition<in File?>?) {
+                    saveUrlGifImage(resource)
+                }
+            })
+    }
+
+    private fun saveUrlGifImage(gifFile: File) {
+        val directory = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "/GifApp"
+        )
+
+        if (!directory.exists()) {
+            directory.mkdirs()
+        }
+
+        val file =
+            File(directory.path + File.separator + Calendar.getInstance().timeInMillis + ".gif")
+        //File(directory.path + File.separator + url.substring(url.lastIndexOf("/") + 1) + ".gif")
+
+        try {
+            val fileOutputStream = FileOutputStream(file)
+            val fileInputStream = FileInputStream(gifFile)
+
+            val inputChannel = fileInputStream.channel
+            val outputChannel = fileOutputStream.channel
+
+            inputChannel.transferTo(0, inputChannel.size(), outputChannel)
+
+            fileOutputStream.close()
+            fileInputStream.close()
+
+            Toast.makeText(
+                this@DetailActivity,
+                "Gif Successfully Downloaded \n Check out GifApp Folder",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            val saveGifIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            saveGifIntent.data = Uri.fromFile(file)
+            sendBroadcast(saveGifIntent)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 
     private fun setupFavoriteToggle(checkBoxFavorite: CheckBox) {
@@ -129,10 +170,6 @@ class DetailActivity : AppCompatActivity() {
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-
-/*          val reference = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            val action = intent?.action
-            while (DownloadManager.ACTION_DOWNLOAD_COMPLETE != action) {*/
 
             var msg = ""
             Log.d("Status", status.toString())
@@ -228,7 +265,7 @@ class DetailActivity : AppCompatActivity() {
             ) {
                 AlertDialog.Builder(this)
                     .setTitle("Permission required")
-                    .setMessage("Permission required to save photos from the Web.")
+                    .setMessage("Permission required to save gif from the Web.")
                     .setPositiveButton("Accept") { dialog, id ->
                         ActivityCompat.requestPermissions(
                             this,
@@ -247,7 +284,8 @@ class DetailActivity : AppCompatActivity() {
                 )
             }
         } else {
-            downloadImage(url)
+            //downloadImage(url)
+            callGlideToSaveGif()
         }
     }
 
@@ -260,7 +298,8 @@ class DetailActivity : AppCompatActivity() {
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    downloadImage(url)
+                    //downloadImage(url)
+                    callGlideToSaveGif()
                 }
                 return
             }
@@ -298,31 +337,6 @@ class DetailActivity : AppCompatActivity() {
         cursor.moveToFirst()
         status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
         Log.d("Status2", status.toString())
-
-/*        lifecycleScope.launch {
-            var downloading = true
-            while (downloading) {
-                cursor.moveToFirst()
-                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
-                    downloading = false
-                }
-                withContext(Dispatchers.Main) {
-*//*                    status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                    Log.d("Status4", status.toString())*//*
-                    //msg = statusMessage(url, directory, status)
-*//*                if (msg != lastMsg) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@DetailActivity, msg, Toast.LENGTH_LONG).show()
-                    }
-                    lastMsg = msg ?: ""
-                    //}
-                    //cursor.close()
-                }*//*
-
-                }
-                delay(1000)
-            }
-        }*/
     }
 
     private fun statusMessage(url: String, directory: File, status: Int): String? {
@@ -342,7 +356,5 @@ class DetailActivity : AppCompatActivity() {
 
     companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1
-        private const val LINK =
-            "https://shwanoff.ru/wp-content/uploads/2018/03/URL-tagging-image.png"
     }
 }

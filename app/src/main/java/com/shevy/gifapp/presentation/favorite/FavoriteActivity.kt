@@ -31,8 +31,8 @@ class FavoriteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFavoriteBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = ActivityFavoriteBinding.inflate(layoutInflater).also { setContentView(it.root) }
+        //setContentView(binding.root)
 
         val testButton = binding.testButton
         val recyclerView = binding.favoritesRecyclerView
