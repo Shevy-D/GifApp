@@ -3,12 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.136" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/custom_background_for_search_view.xml" value="0.136" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_default_gif.xml" value="0.1" />
+        <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_file_download.xml" value="0.136" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_heart_filled.xml" value="0.1" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_heart_outlined.xml" value="0.1" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_heart_outlined_white.xml" value="0.1335" />
+        <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.136" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_menu.xml" value="0.148" />
+        <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/ic_share_file.xml" value="0.136" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/rounded_corners_for_list_item.xml" value="0.136" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/drawable/selector_wishlist_item.xml" value="0.1" />
         <entry key="..\:/Users/dmitr/AndroidStudioProjects/GifApp/app/src/main/res/layout-v31/recyclerview_item.xml" value="0.12552083333333333" />
