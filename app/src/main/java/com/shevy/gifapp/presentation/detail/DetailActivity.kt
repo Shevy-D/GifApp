@@ -56,7 +56,6 @@ class DetailActivity : AppCompatActivity() {
         url = intent.getStringExtra("url").toString()
         previewUrl = intent.getStringExtra("previewUrl").toString()
         Glide.with(this@DetailActivity).load(previewUrl).into(detailImageView)
-
     }
 
     override fun onResume() {
@@ -92,16 +91,29 @@ class DetailActivity : AppCompatActivity() {
 
             R.id.share_menu
             -> {
-                Toast.makeText(
+/*                Toast.makeText(
                     this@DetailActivity,
                     "You clicked on Share Button",
                     Toast.LENGTH_SHORT
-                ).show()
+                ).show()*/
 
-                shareGif()
+                shareGifTestFun()
+                //shareGif()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun shareGifTestFun() {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url)
+        sendIntent.type = "text/plain"
+        startActivity(Intent.createChooser(sendIntent, "Share GIF"))
+
+        //sendIntent.putExtra(Intent.EXTRA_STREAM, url)
+        //sendIntent.type = "image/gif"
+        //startActivity(sendIntent)
     }
 
     private fun shareGif() {
@@ -116,7 +128,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun shareUrlGifImage(shareImage: File) {
-
         val location = File(
             "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)} ${
                 resources.getString(R.string.app_name)
@@ -138,10 +149,9 @@ class DetailActivity : AppCompatActivity() {
             fileInputStream.close()
 
             val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "gif/*"
-            //val uri = Uri.fromFile(shareFile)
+            shareIntent.type = "text/plain"
             val uri = Uri.parse(shareFile.path)
-            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, url)
             startActivity(Intent.createChooser(shareIntent, "Share Gif"))
 
         } catch (e: FileNotFoundException) {
@@ -198,9 +208,8 @@ class DetailActivity : AppCompatActivity() {
             val saveGifIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
             saveGifIntent.data = Uri.fromFile(file)
             sendBroadcast(saveGifIntent)
+
             progressBar.visibility = View.GONE
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }
