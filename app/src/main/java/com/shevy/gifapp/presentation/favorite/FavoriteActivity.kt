@@ -35,7 +35,7 @@ class FavoriteActivity : AppCompatActivity() {
         binding = ActivityFavoriteBinding.inflate(layoutInflater).also { setContentView(it.root) }
         //setContentView(binding.root)
 
-        getActivity(this@FavoriteActivity)?.title = "Favorites "
+        getActivity(this@FavoriteActivity)?.title = "Favorites"
 
         val testButton = binding.testButton
         val recyclerView = binding.favoritesRecyclerView
