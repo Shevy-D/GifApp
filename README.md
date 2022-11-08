@@ -1,4 +1,4 @@
-## GifApp
+### GifApp
 ---
 ### Description
 
