@@ -4,10 +4,10 @@ The application for finding GIFs and then downloading them or sharing them
 
 ### Screenshots
 ---
-<img align="left" alt="Screen1" width="200px" src="https://user-images.githubusercontent.com/96663113/200574144-c3739b5b-fe29-45b6-9051-17bf73c1f3ee.jpg" />
-<img align="left" alt="Screen2" width="200px" src="https://user-images.githubusercontent.com/96663113/200574144-c3739b5b-fe29-45b6-9051-17bf73c1f3ee.jpg" />
-<img align="left" alt="Screen3" width="200px" src="https://user-images.githubusercontent.com/96663113/200574144-c3739b5b-fe29-45b6-9051-17bf73c1f3ee.jpg" />
-<img align="center" alt="Screen4" width="200px" src="https://user-images.githubusercontent.com/96663113/200574144-c3739b5b-fe29-45b6-9051-17bf73c1f3ee.jpg" />
+<img align="left" alt="Screen1" width="200px" src="https://user-images.githubusercontent.com/96663113/200588112-e280d7ab-5e9f-47d3-a9c3-c33981498d95.jpg" />
+<img align="left" alt="Screen2" width="200px" src="https://user-images.githubusercontent.com/96663113/200588125-49b3ec6f-9eb6-491b-a07d-920815104ada.jpg" />
+<img align="left" alt="Screen3" width="200px" src="https://user-images.githubusercontent.com/96663113/200588142-813be94c-5ddf-4fbe-994b-7ed6fc16820f.jpg" />
+<img align="center" alt="Screen4" width="200px" src="https://user-images.githubusercontent.com/96663113/200588152-0303019b-a4c1-47d0-95c4-89e000979e5e.jpg" />
 
 ### Main Features
 ---
