@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.shevy.gifapp.data.models.database.Favorite
 import com.shevy.gifapp.databinding.ActivityFavoriteBinding
 import com.shevy.gifapp.presentation.detail.DetailActivity
@@ -33,6 +34,8 @@ class FavoriteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriteBinding.inflate(layoutInflater).also { setContentView(it.root) }
         //setContentView(binding.root)
+
+        getActivity(this@FavoriteActivity)?.title = "Favorites"
 
         val testButton = binding.testButton
         val recyclerView = binding.favoritesRecyclerView
