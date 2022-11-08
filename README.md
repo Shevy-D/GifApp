@@ -4,7 +4,7 @@ The application for finding GIFs and then downloading them or sharing them
 
 #### Screenshots
 ---
-<img align="left" alt="Screen1" width="200px" src="https://user-images.githubusercontent.com/96663113/200574144-c3739b5b-fe29-45b6-9051-17bf73c1f3ee.jpg" />
+<img align="center" alt="Screen1" width="200px" src="https://user-images.githubusercontent.com/96663113/200574144-c3739b5b-fe29-45b6-9051-17bf73c1f3ee.jpg" />
 <img align="left" alt="Screen2" width="200px" src="https://user-images.githubusercontent.com/96663113/200574144-c3739b5b-fe29-45b6-9051-17bf73c1f3ee.jpg" />
 <img align="left" alt="Screen3" width="200px" src="https://user-images.githubusercontent.com/96663113/200574144-c3739b5b-fe29-45b6-9051-17bf73c1f3ee.jpg" />
 
