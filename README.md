@@ -19,3 +19,4 @@ The application for finding GIFs and then downloading them or sharing them
 - [Glide](https://github.com/bumptech/glide) - Image (GIF) loading and caching library for Android
 - [Koin](https://github.com/InsertKoinIO/koin) - A pragmatic lightweight dependency injection framework for Kotlin developers
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) - Library support for Kotlin coroutines with multiplatform support
+- [Retrofit](https://square.github.io/retrofit/) - A type-safe HTTP client for Android and Java
