@@ -10,7 +10,7 @@ The application for finding GIFs and then downloading them or sharing them
 - Room
 - Coroutines
 - Flow
-- [Koin] (https://github.com/InsertKoinIO/koin)
+- [Koin](https://github.com/InsertKoinIO/koin)
 - Retrofit
 - [Glide](https://github.com/bumptech/glide)
 
