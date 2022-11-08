@@ -12,6 +12,10 @@ The application for finding GIFs and then downloading them or sharing them
 <br/>
 <br/>
 
+<br/>
+<br/>
+<br/>
+
 ### Main Features
 ---
 - Kotlin
