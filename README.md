@@ -1,6 +1,7 @@
 ## GifApp
 ---
-<img align="left" alt="Screen1" width="200px" src="https://user-images.githubusercontent.com/96663113/200588863-0bda71b6-d7e8-47eb-910b-0e9fd5fb2afa.png" /> The application for finding GIFs and then downloading them or sharing them
+<img align="left" alt="Screen1" width="100px" src="https://user-images.githubusercontent.com/96663113/200588863-0bda71b6-d7e8-47eb-910b-0e9fd5fb2afa.png" /> The application for finding GIFs and then downloading them or sharing them
+<br />
 
 ### Screenshots
 ---
