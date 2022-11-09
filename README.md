@@ -14,7 +14,7 @@
 <img align="left" alt="Screen3" width="185px" src="https://user-images.githubusercontent.com/96663113/200588142-813be94c-5ddf-4fbe-994b-7ed6fc16820f.jpg" />
 <img align="center" alt="Screen4" width="185px" src="https://user-images.githubusercontent.com/96663113/200588152-0303019b-a4c1-47d0-95c4-89e000979e5e.jpg" /> -->
 
-<img align="center" alt="Screen4" height="300px" src="https://user-images.githubusercontent.com/96663113/200902125-e9d8aadb-97e8-4bf4-8a27-2077465398d2.png" />
+<img align="center" alt="Screen4" height="600px" src="https://user-images.githubusercontent.com/96663113/200902125-e9d8aadb-97e8-4bf4-8a27-2077465398d2.png" />
 
 
 ### Main Features
