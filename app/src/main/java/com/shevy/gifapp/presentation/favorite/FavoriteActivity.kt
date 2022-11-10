@@ -38,7 +38,7 @@ class FavoriteActivity : AppCompatActivity() {
         getActivity(this@FavoriteActivity)?.title = "Favorites"
 
         val testButton = binding.testButton
-        //val testButton2 = binding.testButton
+        val testButton2 = binding.testButton
         val recyclerView = binding.favoritesRecyclerView
 
         recyclerView.layoutManager =
