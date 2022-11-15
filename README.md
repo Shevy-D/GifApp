@@ -4,7 +4,7 @@
 
 <br/>
 
-<img align="left" alt="Google play" width="150px" src="https://user-images.githubusercontent.com/96663113/201872058-31ce2a2f-8aaf-458a-8428-2e82d59e44a8.png" />
+<img align="center" alt="Google play" width="150px" src="https://user-images.githubusercontent.com/96663113/201872058-31ce2a2f-8aaf-458a-8428-2e82d59e44a8.png" />
 
 <br/>
 <br/>
