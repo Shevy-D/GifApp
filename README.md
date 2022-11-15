@@ -2,7 +2,7 @@
 ---
 <img align="left" alt="Screen1" width="150px" src="https://user-images.githubusercontent.com/96663113/200588863-0bda71b6-d7e8-47eb-910b-0e9fd5fb2afa.png" /> The application for finding GIFs and then downloading them or sharing them.
 <br/>
-[<img align="left" alt="Google play" width="200px" src="https://user-images.githubusercontent.com/96663113/201872058-31ce2a2f-8aaf-458a-8428-2e82d59e44a8.png"/>](https://play.google.com/store/apps/details?id=com.shevy.gifapp)
+[<img align="left" alt="Google play" width="300px" src="https://user-images.githubusercontent.com/96663113/201872058-31ce2a2f-8aaf-458a-8428-2e82d59e44a8.png"/>](https://play.google.com/store/apps/details?id=com.shevy.gifapp)
 
 <br/>
 <br/>
