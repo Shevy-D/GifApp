@@ -4,7 +4,7 @@
 <br/>
 [<img align="left" alt="Google play" width="200px" src="https://user-images.githubusercontent.com/96663113/201872058-31ce2a2f-8aaf-458a-8428-2e82d59e44a8.png"/>](https://play.google.com/store/apps/details?id=com.shevy.gifapp)
 
-
+<br/>
 <br/>
 <br/>
 <br/>
